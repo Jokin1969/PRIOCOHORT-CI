@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment variables
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Generated files
+dist/
+build/
+*.pdf
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Data files (comentar si quieres trackearlos)
+# data/*.csv
+data/signed-consents/
+
+# Assets temporales
+public/assets/firma-izaro.png
+public/assets/logo-osakidetza.png
