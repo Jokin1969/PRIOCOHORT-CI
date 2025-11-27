@@ -62,6 +62,17 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
         }
       };
 
+      // Función para añadir numeración de página
+      const addPageNumber = (pageNum, totalPages) => {
+        doc.fontSize(9)
+           .font('Helvetica')
+           .fillColor('black')
+           .text(`${pageNum}/${totalPages}`, 0, doc.page.height - 40, {
+             align: 'center',
+             width: doc.page.width
+           });
+      };
+
       // ==================== PÁGINA 1 ====================
       addHeader();
 
@@ -273,6 +284,9 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .font('Helvetica')
          .text('recibir información sobre progresión de la enfermedad');
 
+      // Numeración de página 1
+      addPageNumber(1, 2);
+
       // ==================== PÁGINA 2 ====================
       doc.addPage();
       addHeader();
@@ -402,12 +416,12 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
           doc.image(signatureBuffer, 60, doc.y, {
             fit: [200, 80]
           });
-          doc.moveDown(3);
+          doc.moveDown(1);
         } catch (err) {
-          doc.moveDown(3);
+          doc.moveDown(1);
         }
       } else {
-        doc.moveDown(3);
+        doc.moveDown(1);
       }
 
       // Formatear la fecha actual
@@ -461,15 +475,18 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
         doc.image(izaroSignaturePath, 60, doc.y, {
           fit: [150, 60]
         });
-        doc.moveDown(3);
+        doc.moveDown(1);
       } else {
-        doc.moveDown(3);
+        doc.moveDown(1);
       }
 
       doc.fontSize(9)
          .font('Helvetica')
          .text('______________________________', 60)
          .text('Firma de la Dra. Izaro Kortazar', 60);
+
+      // Numeración de página 2
+      addPageNumber(2, 2);
 
       // Finalizar documento
       doc.end();

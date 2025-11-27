@@ -1,9 +1,19 @@
-const nodemailer = require('nodemailer');
+// Try to load nodemailer, but gracefully handle if it's not available
+let nodemailer = null;
+try {
+  nodemailer = require('nodemailer');
+  console.log('✅ Nodemailer module loaded successfully');
+} catch (error) {
+  console.error('❌ Failed to load nodemailer module:', error.message);
+  console.error('   This usually means nodemailer is not installed.');
+  console.error('   Check that package.json includes nodemailer and npm install ran successfully.');
+}
 
 class EmailService {
   constructor() {
     this.transporter = null;
     this.isInitialized = false;
+    this.nodemailerAvailable = nodemailer !== null;
     this.initializeTransporter();
   }
 
@@ -12,9 +22,21 @@ class EmailService {
    */
   initializeTransporter() {
     try {
-      // Check if nodemailer is available
-      if (!nodemailer || typeof nodemailer.createTransporter !== 'function') {
-        console.log('⚠️  Nodemailer not available. Email sending will be disabled.');
+      // Check if nodemailer module was loaded
+      if (!this.nodemailerAvailable) {
+        console.log('⚠️  Nodemailer module not available. Email sending will be disabled.');
+        console.log('   Please verify:');
+        console.log('   1. nodemailer is listed in package.json dependencies');
+        console.log('   2. npm install completed without errors');
+        console.log('   3. node_modules/nodemailer directory exists');
+        this.isInitialized = false;
+        return;
+      }
+
+      // Additional check
+      if (typeof nodemailer.createTransporter !== 'function') {
+        console.log('⚠️  Nodemailer loaded but createTransporter not available.');
+        console.log('   Nodemailer version may be incompatible.');
         this.isInitialized = false;
         return;
       }
@@ -22,9 +44,20 @@ class EmailService {
       // Check if SMTP is configured
       if (!process.env.SMTP_HOST || !process.env.SMTP_USER) {
         console.log('⚠️  SMTP not configured. Email sending will be disabled.');
+        console.log('   Missing environment variables:');
+        if (!process.env.SMTP_HOST) console.log('   - SMTP_HOST');
+        if (!process.env.SMTP_PORT) console.log('   - SMTP_PORT (using default: 587)');
+        if (!process.env.SMTP_USER) console.log('   - SMTP_USER');
+        if (!process.env.SMTP_PASS) console.log('   - SMTP_PASS');
         this.isInitialized = false;
         return;
       }
+
+      console.log('📧 Initializing email service with:');
+      console.log(`   Host: ${process.env.SMTP_HOST}`);
+      console.log(`   Port: ${process.env.SMTP_PORT || '587'}`);
+      console.log(`   User: ${process.env.SMTP_USER}`);
+      console.log(`   Secure: ${process.env.SMTP_SECURE === 'true'}`);
 
       const smtpConfig = {
         host: process.env.SMTP_HOST,
@@ -41,6 +74,7 @@ class EmailService {
       console.log('✅ Email service initialized successfully');
     } catch (error) {
       console.error('❌ Error initializing email service:', error.message);
+      console.error('   Stack trace:', error.stack);
       this.isInitialized = false;
     }
   }
