@@ -18,6 +18,12 @@ class DropboxService {
    * Initialize Dropbox client
    */
   initialize() {
+    // Debug: Log credential status (without exposing full values)
+    console.log('🔍 Dropbox credentials check:');
+    console.log(`   - REFRESH_TOKEN: ${this.refreshToken ? `${this.refreshToken.substring(0, 10)}...` : 'NOT SET'}`);
+    console.log(`   - CLIENT_ID: ${this.clientId ? `${this.clientId.substring(0, 10)}...` : 'NOT SET'}`);
+    console.log(`   - CLIENT_SECRET: ${this.clientSecret ? 'SET' : 'NOT SET'}`);
+
     if (!this.accessToken && !this.refreshToken) {
       console.warn('⚠️  Dropbox credentials not configured. Dropbox sync will be disabled.');
       return;
