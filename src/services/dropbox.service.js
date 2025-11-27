@@ -5,8 +5,9 @@ class DropboxService {
   constructor() {
     this.accessToken = process.env.DROPBOX_ACCESS_TOKEN;
     this.refreshToken = process.env.DROPBOX_REFRESH_TOKEN;
-    this.clientId = process.env.DROPBOX_CLIENT_ID;
-    this.clientSecret = process.env.DROPBOX_CLIENT_SECRET;
+    // Soportar tanto CLIENT_ID como APP_KEY (Dropbox usa ambas nomenclaturas)
+    this.clientId = process.env.DROPBOX_CLIENT_ID || process.env.DROPBOX_APP_KEY;
+    this.clientSecret = process.env.DROPBOX_CLIENT_SECRET || process.env.DROPBOX_APP_SECRET;
     this.tokenExpiresAt = null;
     this.dbx = null;
 
