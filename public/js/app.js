@@ -109,28 +109,119 @@ function setupInformationPage() {
     const btnNext = document.getElementById('btn-next-info');
     const btnIndex = document.getElementById('btn-index');
     const btnDownload = document.getElementById('btn-download-info');
+    const contentContainer = document.getElementById('information-content');
+
+    // Mostrar la primera página al cargar
+    renderInformationSection(0);
 
     btnPrev.addEventListener('click', () => {
-        // TODO: Implementar navegación entre páginas de la hoja informativa
-        console.log('Página anterior de información');
+        if (AppState.informationPageIndex > 0) {
+            AppState.informationPageIndex--;
+            renderInformationSection(AppState.informationPageIndex);
+        }
     });
 
     btnNext.addEventListener('click', () => {
-        // TODO: Implementar navegación entre páginas de la hoja informativa
-        // Cuando llegue al final, ir a la página de consentimiento
-        navigateToPage('consent-page');
+        if (AppState.informationPageIndex < INFORMATION_SECTIONS.length - 1) {
+            AppState.informationPageIndex++;
+            renderInformationSection(AppState.informationPageIndex);
+        } else {
+            // Llegamos al final, ir a la página de consentimiento
+            navigateToPage('consent-page');
+        }
     });
 
     btnIndex.addEventListener('click', () => {
-        // TODO: Mostrar índice de la hoja informativa
-        console.log('Mostrar índice');
+        showIndexModal();
     });
 
     btnDownload.addEventListener('click', () => {
-        // TODO: Generar PDF de la hoja informativa
-        console.log('Descargar hoja informativa');
-        alert('Función de descarga de hoja informativa - Por implementar con el contenido real');
+        downloadInformationSheet();
     });
+}
+
+function renderInformationSection(index) {
+    const contentContainer = document.getElementById('information-content');
+    const btnPrev = document.getElementById('btn-prev-info');
+    const btnNext = document.getElementById('btn-next-info');
+
+    // Obtener la sección actual
+    const sectionKey = INFORMATION_SECTIONS[index];
+    const section = INFORMATION_CONTENT[sectionKey];
+
+    // Renderizar el contenido
+    contentContainer.innerHTML = section.content;
+
+    // Actualizar botones de navegación
+    btnPrev.disabled = index === 0;
+    btnPrev.style.visibility = index === 0 ? 'hidden' : 'visible';
+
+    // Cambiar el texto del botón siguiente en la última página
+    if (index === INFORMATION_SECTIONS.length - 1) {
+        btnNext.textContent = 'Ir al Consentimiento →';
+    } else {
+        btnNext.textContent = 'Siguiente →';
+    }
+
+    // Scroll to top
+    window.scrollTo(0, 0);
+}
+
+function showIndexModal() {
+    // Crear modal de índice
+    const modal = document.createElement('div');
+    modal.className = 'modal show';
+    modal.id = 'index-modal';
+
+    const modalContent = document.createElement('div');
+    modalContent.className = 'modal-content index-modal-content';
+
+    let indexHTML = '<h3>Índice de la Hoja Informativa</h3><div class="index-list">';
+
+    // Crear lista de secciones
+    INFORMATION_SECTIONS.forEach((sectionKey, index) => {
+        const section = INFORMATION_CONTENT[sectionKey];
+        if (section.showInIndex) {
+            indexHTML += `<div class="index-item" data-index="${index}">
+                <span class="index-number">${index}.</span>
+                <span class="index-title">${section.title}</span>
+            </div>`;
+        }
+    });
+
+    indexHTML += '</div>';
+    indexHTML += '<div class="modal-buttons"><button id="close-index" class="btn btn-secondary">Cerrar</button></div>';
+
+    modalContent.innerHTML = indexHTML;
+    modal.appendChild(modalContent);
+    document.body.appendChild(modal);
+
+    // Event listeners
+    document.getElementById('close-index').addEventListener('click', () => {
+        modal.remove();
+    });
+
+    // Click en cualquier elemento del índice
+    document.querySelectorAll('.index-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const index = parseInt(item.dataset.index);
+            AppState.informationPageIndex = index;
+            renderInformationSection(index);
+            modal.remove();
+        });
+    });
+
+    // Cerrar al hacer click fuera del modal
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.remove();
+        }
+    });
+}
+
+function downloadInformationSheet() {
+    // Abrir el PDF de la hoja informativa en una nueva ventana
+    window.open('/docs/Hoja de información al paciente.pdf', '_blank');
 }
 
 // ============================================================================
