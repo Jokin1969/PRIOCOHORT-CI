@@ -54,28 +54,12 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
 
       // Función para añadir checkbox
       const addCheckbox = (x, y, checked = false) => {
+        doc.rect(x, y, 10, 10).stroke();
         if (checked) {
-          // Mostrar marca verde de OK cuando está seleccionado
-          doc.fillColor('#28a745')
-             .fontSize(12)
+          doc.fontSize(12)
              .font('Helvetica-Bold')
-             .text('✓', x, y)
-             .fillColor('black');
-        } else {
-          // Mostrar cuadrado vacío cuando no está seleccionado
-          doc.rect(x, y, 10, 10).stroke();
+             .text('✓', x, y);
         }
-      };
-
-      // Función para añadir numeración de página
-      const addPageNumber = (pageNum, totalPages) => {
-        doc.fontSize(9)
-           .font('Helvetica')
-           .fillColor('black')
-           .text(`${pageNum}/${totalPages}`, 0, doc.page.height - 40, {
-             align: 'center',
-             width: doc.page.width
-           });
       };
 
       // ==================== PÁGINA 1 ====================
@@ -185,7 +169,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
         doc.fontSize(9).font('Helvetica').text('• ' + point, 85);
       });
 
-      doc.moveDown(1.5);
+      doc.moveDown();
 
       // CONSENTIMIENTO PRINCIPAL
       doc.fontSize(11)
@@ -288,9 +272,6 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .text('NO QUIERO ', 75, currentY, { continued: true })
          .font('Helvetica')
          .text('recibir información sobre progresión de la enfermedad');
-
-      // Numeración de página 1
-      addPageNumber(1, 2);
 
       // ==================== PÁGINA 2 ====================
       doc.addPage();
@@ -489,9 +470,6 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .font('Helvetica')
          .text('______________________________', 60)
          .text('Firma de la Dra. Izaro Kortazar', 60);
-
-      // Numeración de página 2
-      addPageNumber(2, 2);
 
       // Finalizar documento
       doc.end();
