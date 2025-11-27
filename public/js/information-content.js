@@ -3,49 +3,18 @@ const INFORMATION_CONTENT = {
     // Página principal con datos del estudio
     intro: {
         id: 'intro',
-        title: 'Hoja de Información al Paciente',
+        title: 'Hoja de información',
         showInIndex: false,
         content: `
             <div class="info-header-section">
-                <h1>HOJA DE INFORMACIÓN AL PACIENTE</h1>
-                <h2>PARA EL PROYECTO DE INVESTIGACIÓN MULTICÉNTRICO QUE IMPLICA LA UTILIZACIÓN DE MUESTRAS BIOLÓGICAS</h2>
+                <h1>Cohorte prospectiva de familias con enfermedades priónicas: recopilación de muestras biológicas para el análisis de potenciales biomarcadores diagnósticos y pronósticos y caracterización de la historia natural</h1>
+                <h2>(PRIOCOHORT)</h2>
 
                 <div class="study-info">
-                    <h3>TÍTULO DEL PROYECTO:</h3>
-                    <p>Cohorte prospectiva de familias con enfermedades priónicas: recopilación de muestras biológicas para el análisis de potenciales biomarcadores diagnósticos y pronósticos y caracterización de la historia natural</p>
-
-                    <h3>CÓDIGO DEL ESTUDIO:</h3>
-                    <p><strong>PRIOCOHORT</strong></p>
-
                     <h3>INVESTIGADORES PRINCIPALES:</h3>
-                    <p><strong>Centros coordinadores:</strong></p>
                     <ul>
-                        <li>Dra. Izaro Kortazar - Hospital Universitario Araba (Coordinadora Clínica)</li>
-                        <li>Dr. Joaquín Castilla - CIC bioGUNE (Coordinador Científico)</li>
-                    </ul>
-
-                    <p><strong>Centros participantes:</strong></p>
-                    <ul>
-                        <li>Dr. Hasier Eraña - CIC bioGUNE</li>
-                        <li>Dra. Guiomar Pérez de Nanclares – Hospital Universitario de Cruces, IIS Biobizkaia</li>
-                        <li>Dra. Raquel Sánchez-Valle - Hospital Clínic Barcelona</li>
-                        <li>Dr. Sergi Borrego - Hospital Clínic Barcelona</li>
-                    </ul>
-
-                    <h3>DURACIÓN DEL ESTUDIO:</h3>
-                    <ul>
-                        <li><strong>Periodo mínimo garantizado:</strong> 5 años (2025-2030)</li>
-                        <li><strong>Seguimiento:</strong> El estudio puede extenderse mediante aprobaciones éticas adicionales</li>
-                        <li><strong>Su participación:</strong> Voluntaria durante todo el periodo, puede retirar su consentimiento en cualquier momento</li>
-                    </ul>
-
-                    <h3>CENTROS DONDE SE REALIZARÁ:</h3>
-                    <ul>
-                        <li>Hospital Universitario Araba (Txagorritxu) - Centro coordinador - Reclutamiento y seguimiento</li>
-                        <li>CIC bioGUNE - Análisis de laboratorio</li>
-                        <li>Hospital Clínic Barcelona - Reclutamiento y seguimiento</li>
-                        <li>Hospital Universitario de Cruces - Estudios genéticos</li>
-                        <li>Colaboraciones con centros internacionales según necesidades específicas</li>
+                        <li>Dra. Izaro Kortazar - Hospital Universitario Araba (Coordinadora Clínica) - <a href="mailto:izaro.kortazarzubizarreta@osakidetza.eus">izaro.kortazarzubizarreta@osakidetza.eus</a></li>
+                        <li>Dr. Joaquín Castilla - CIC bioGUNE (Coordinador Científico) - <a href="mailto:jcastilla@cicbiogune.es">jcastilla@cicbiogune.es</a></li>
                     </ul>
                 </div>
 
@@ -64,7 +33,7 @@ const INFORMATION_CONTENT = {
         title: '¿Por qué es importante este estudio ahora?',
         showInIndex: true,
         content: `
-            <h2>¿POR QUÉ ES IMPORTANTE ESTE ESTUDIO AHORA?</h2>
+            <h2 style="text-align: center;">¿POR QUÉ ES IMPORTANTE ESTE ESTUDIO AHORA?</h2>
 
             <p>Las enfermedades priónicas están viviendo un momento histórico. Por primera vez, tenemos razones reales para ser optimistas:</p>
 
@@ -91,7 +60,7 @@ const INFORMATION_CONTENT = {
         title: '¿Cuál es el propósito del estudio?',
         showInIndex: true,
         content: `
-            <h2>¿CUÁL ES EL PROPÓSITO DEL ESTUDIO?</h2>
+            <h2 style="text-align: center;">¿CUÁL ES EL PROPÓSITO DEL ESTUDIO?</h2>
 
             <h3>¿Qué queremos conseguir?</h3>
             <p>Nuestro objetivo principal es comprender en profundidad cómo evolucionan las enfermedades priónicas en cada persona, especialmente en las formas genéticas, para mejorar el diagnóstico, el seguimiento y preparar el desarrollo de futuras terapias.</p>
@@ -147,7 +116,7 @@ const INFORMATION_CONTENT = {
         title: '¿Quién puede participar?',
         showInIndex: true,
         content: `
-            <h2>¿QUIÉN PUEDE PARTICIPAR?</h2>
+            <h2 style="text-align: center;">¿QUIÉN PUEDE PARTICIPAR?</h2>
 
             <h3>Requisitos de edad</h3>
             <p>Para participar en este estudio es necesario ser <strong>mayor de 18 años</strong>, sin excepción. Este requisito se aplica tanto para los participantes principales como para los familiares que deseen actuar como observadores.</p>
@@ -179,7 +148,7 @@ const INFORMATION_CONTENT = {
         title: '¿Qué tipo de muestras se necesitan?',
         showInIndex: true,
         content: `
-            <h2>¿QUÉ TIPO DE MUESTRAS SE NECESITAN?</h2>
+            <h2 style="text-align: center;">¿QUÉ TIPO DE MUESTRAS SE NECESITAN?</h2>
 
             <p>Para comprender la historia natural de las enfermedades priónicas y desarrollar mejores métodos de diagnóstico temprano, necesitamos analizar diferentes tipos de muestras biológicas donde podemos detectar biomarcadores específicos. Estas muestras nos permiten buscar señales de la enfermedad incluso antes de que aparezcan síntomas, seguir su evolución a lo largo del tiempo, y correlacionar los cambios en las muestras (subidas o bajadas en los niveles de biomarcadores) con la progresión clínica (la aparición y severidad de los signos y síntomas que caracterizan la enfermedad).</p>
 
@@ -282,7 +251,7 @@ const INFORMATION_CONTENT = {
         title: '¿Qué tipo de estudios haremos con sus muestras?',
         showInIndex: true,
         content: `
-            <h2>¿QUÉ TIPO DE ESTUDIOS HAREMOS CON SUS MUESTRAS?</h2>
+            <h2 style="text-align: center;">¿QUÉ TIPO DE ESTUDIOS HAREMOS CON SUS MUESTRAS?</h2>
 
             <div class="warning-box">
                 <p><strong>IMPORTANTE:</strong> No en todos los casos el donante será sometido a todos los tipos de análisis que se describen a continuación. La selección de estudios se realizará según su situación específica, el desarrollo del estudio y siempre con su consentimiento. Algunos análisis son básicos y se realizan a todos los participantes, mientras que otros son opcionales o se realizan solo en casos específicos.</p>
@@ -329,7 +298,7 @@ const INFORMATION_CONTENT = {
         title: '¿Qué tipo de estudios haremos con su ayuda y con la colaboración de la familia?',
         showInIndex: true,
         content: `
-            <h2>¿QUÉ TIPO DE ESTUDIOS HAREMOS CON SU AYUDA Y CON LA COLABORACIÓN DE LA FAMILIA?</h2>
+            <h2 style="text-align: center;">¿QUÉ TIPO DE ESTUDIOS HAREMOS CON SU AYUDA Y CON LA COLABORACIÓN DE LA FAMILIA?</h2>
 
             <p>Uno de los objetivos de este estudio es comprender la historia natural de las enfermedades priónicas - es decir, cómo evolucionan desde las fases más tempranas hasta las más avanzadas. Para conseguir esto, necesitamos construir esta historia desde dos perspectivas complementarias: la médica y la familiar.</p>
 
@@ -392,7 +361,7 @@ const INFORMATION_CONTENT = {
         title: '¿Qué beneficios se esperan?',
         showInIndex: true,
         content: `
-            <h2>¿QUÉ BENEFICIOS SE ESPERAN?</h2>
+            <h2 style="text-align: center;">¿QUÉ BENEFICIOS SE ESPERAN?</h2>
 
             <h3>Si es portador asintomático de una mutación</h3>
             <p>Su participación le proporcionará seguimiento especializado por los mejores expertos en enfermedades priónicas, quienes podrán detectar de forma temprana cualquier cambio que pueda ocurrir y notificárselo si así lo desea. Esto le permitirá una mejor planificación de su futuro con información precisa sobre su evolución específica.</p>
@@ -438,7 +407,7 @@ const INFORMATION_CONTENT = {
         title: '¿Qué tipo de riesgos, molestias y consideraciones especiales implica?',
         showInIndex: true,
         content: `
-            <h2>¿QUÉ TIPO DE RIESGOS, MOLESTIAS Y CONSIDERACIONES ESPECIALES IMPLICA?</h2>
+            <h2 style="text-align: center;">¿QUÉ TIPO DE RIESGOS, MOLESTIAS Y CONSIDERACIONES ESPECIALES IMPLICA?</h2>
 
             <h3>Riesgos físicos (muy bajos)</h3>
 
@@ -515,7 +484,7 @@ const INFORMATION_CONTENT = {
         title: '¿Cómo se va a manejar su información desde el punto de vista de la confidencialidad y protección de datos?',
         showInIndex: true,
         content: `
-            <h2>¿CÓMO SE VA A MANEJAR SU INFORMACIÓN DESDE EL PUNTO DE VISTA DE LA CONFIDENCIALIDAD Y PROTECCIÓN DE DATOS?</h2>
+            <h2 style="text-align: center;">¿CÓMO SE VA A MANEJAR SU INFORMACIÓN DESDE EL PUNTO DE VISTA DE LA CONFIDENCIALIDAD Y PROTECCIÓN DE DATOS?</h2>
 
             <h3>Sus datos están completamente protegidos</h3>
             <p>Todos sus datos personales y muestras biológicas reciben protección completa mediante:</p>
@@ -551,7 +520,7 @@ const INFORMATION_CONTENT = {
         title: '¿Cuál es el destino de la muestra tras su utilización?',
         showInIndex: true,
         content: `
-            <h2>¿CUÁL ES EL DESTINO DE LA MUESTRA TRAS SU UTILIZACIÓN?</h2>
+            <h2 style="text-align: center;">¿CUÁL ES EL DESTINO DE LA MUESTRA TRAS SU UTILIZACIÓN?</h2>
 
             <p>Una vez finalizada la investigación, es posible que queden muestras sobrantes. Respecto a estas muestras excedentes, se le ofrecen las siguientes opciones:</p>
 
@@ -613,7 +582,7 @@ const INFORMATION_CONTENT = {
         title: '¿Cómo puedo retirarme del estudio?',
         showInIndex: true,
         content: `
-            <h2>¿CÓMO PUEDO RETIRARME DEL ESTUDIO?</h2>
+            <h2 style="text-align: center;">¿CÓMO PUEDO RETIRARME DEL ESTUDIO?</h2>
 
             <h3>Su derecho fundamental a retirarse</h3>
             <p><strong>Puede revocar su consentimiento en cualquier momento, por cualquier motivo, sin necesidad de dar explicaciones y sin que esto le perjudique de ninguna manera.</strong></p>
@@ -703,7 +672,7 @@ const INFORMATION_CONTENT = {
         title: '¿Qué garantías legales y éticas tiene el estudio?',
         showInIndex: true,
         content: `
-            <h2>¿QUÉ GARANTÍAS LEGALES Y ÉTICAS TIENE EL ESTUDIO?</h2>
+            <h2 style="text-align: center;">¿QUÉ GARANTÍAS LEGALES Y ÉTICAS TIENE EL ESTUDIO?</h2>
 
             <h3>Aprobaciones obtenidas</h3>
             <p>Este estudio cuenta con todas las aprobaciones éticas y regulatorias necesarias, incluyendo:</p>
@@ -741,7 +710,7 @@ const INFORMATION_CONTENT = {
         title: '¿Hay algún costo o compensación?',
         showInIndex: true,
         content: `
-            <h2>¿HAY ALGÚN COSTO O COMPENSACIÓN?</h2>
+            <h2 style="text-align: center;">¿HAY ALGÚN COSTO O COMPENSACIÓN?</h2>
 
             <h3>Información importante sobre compensación económica</h3>
             <div class="warning-box">
@@ -775,7 +744,7 @@ const INFORMATION_CONTENT = {
         title: '¿Con quién puedo contactar si tengo dudas?',
         showInIndex: true,
         content: `
-            <h2>¿CON QUIÉN PUEDO CONTACTAR SI TENGO DUDAS?</h2>
+            <h2 style="text-align: center;">¿CON QUIÉN PUEDO CONTACTAR SI TENGO DUDAS?</h2>
 
             <div class="contact-box">
                 <h3>📞 Dra. Izaro Kortazar (Coordinadora clínica)</h3>

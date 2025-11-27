@@ -158,9 +158,11 @@ function renderInformationSection(index) {
 
     // Cambiar el texto del botón siguiente en la última página
     if (index === INFORMATION_SECTIONS.length - 1) {
-        btnNext.textContent = 'Ir al Consentimiento →';
+        btnNext.textContent = 'Ir al consentimiento →';
+        btnNext.classList.add('btn-to-consent'); // Clase para estilo naranja
     } else {
         btnNext.textContent = 'Siguiente →';
+        btnNext.classList.remove('btn-to-consent');
     }
 
     // Scroll to top
