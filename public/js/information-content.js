@@ -7,7 +7,7 @@ const INFORMATION_CONTENT = {
         showInIndex: false,
         content: `
             <div class="info-header-section">
-                <h1>Cohorte prospectiva de familias con enfermedades priónicas: recopilación de muestras biológicas para el análisis de potenciales biomarcadores diagnósticos y pronósticos y caracterización de la historia natural</h1>
+                <h1 style="color: #003366; text-align: center;">Cohorte prospectiva de familias con enfermedades priónicas: recopilación de muestras biológicas para el análisis de potenciales biomarcadores diagnósticos y pronósticos y caracterización de la historia natural</h1>
                 <h2 style="text-align: center;">(PRIOCOHORT)</h2>
 
                 <div class="study-info">

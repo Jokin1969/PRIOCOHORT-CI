@@ -19,22 +19,8 @@ exports.generateConsentPDF = async (req, res) => {
       });
     }
 
-    // Generar PDF para el donante
+    // Generar PDF para el donante (solo para descarga, NO subir a Dropbox)
     const pdfBufferDonante = await pdfService.generatePDF(consentData, { copyFor: 'donante' });
-
-    // Upload to Dropbox (non-blocking)
-    dropboxSyncService.uploadSignedConsent(
-      consentData.txprCode,
-      pdfBufferDonante,
-      {
-        name: consentData.name,
-        lastName: consentData.lastName,
-        txprCode: consentData.txprCode,
-        submittedAt: new Date().toISOString()
-      }
-    ).catch(error => {
-      console.error('⚠️  No se pudo subir a Dropbox, pero el PDF se generó correctamente:', error.message);
-    });
 
     // Configurar headers para descarga
     res.setHeader('Content-Type', 'application/pdf');

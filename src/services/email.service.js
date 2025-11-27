@@ -12,6 +12,20 @@ class EmailService {
    */
   initializeTransporter() {
     try {
+      // Check if nodemailer is available
+      if (!nodemailer || typeof nodemailer.createTransporter !== 'function') {
+        console.log('⚠️  Nodemailer not available. Email sending will be disabled.');
+        this.isInitialized = false;
+        return;
+      }
+
+      // Check if SMTP is configured
+      if (!process.env.SMTP_HOST || !process.env.SMTP_USER) {
+        console.log('⚠️  SMTP not configured. Email sending will be disabled.');
+        this.isInitialized = false;
+        return;
+      }
+
       const smtpConfig = {
         host: process.env.SMTP_HOST,
         port: parseInt(process.env.SMTP_PORT || '587'),
@@ -21,13 +35,6 @@ class EmailService {
           pass: process.env.SMTP_PASS
         }
       };
-
-      // Check if SMTP is configured
-      if (!process.env.SMTP_HOST || !process.env.SMTP_USER) {
-        console.log('⚠️  SMTP not configured. Email sending will be disabled.');
-        this.isInitialized = false;
-        return;
-      }
 
       this.transporter = nodemailer.createTransporter(smtpConfig);
       this.isInitialized = true;
