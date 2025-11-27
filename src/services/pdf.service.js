@@ -196,14 +196,14 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .font('Helvetica')
          .text('participar voluntariamente en este estudio');
 
-      doc.moveDown();
+      doc.moveDown(2);
 
       // DECISIONES SOBRE RESULTADOS DEL ESTUDIO
       doc.fontSize(11)
          .font('Helvetica-Bold')
          .text('DECISIONES SOBRE LOS RESULTADOS DEL ESTUDIO:', 60);
 
-      doc.moveDown(1.5);
+      doc.moveDown(0.5);
 
       // Información sobre estado genético
       doc.fontSize(10)
@@ -238,7 +238,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .font('Helvetica')
          .text('recibir información sobre mi estado genético');
 
-      doc.moveDown();
+      doc.moveDown(2);
 
       // Información sobre biomarcadores
       doc.fontSize(10)
