@@ -100,7 +100,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .font('Helvetica')
          .text('Dra. Izaro Kortazar');
 
-      doc.moveDown(1);
+      doc.moveDown(0.5);
 
       // Título del proyecto
       doc.fontSize(10)
@@ -192,7 +192,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .font('Helvetica-Bold')
          .text('CONSENTIMIENTO PRINCIPAL:', 60);
 
-      doc.moveDown(0.5);
+      doc.moveDown(0.3);
 
       currentY = doc.y;
       addCheckbox(60, currentY, data.consent?.mainConsent1);
@@ -219,7 +219,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .font('Helvetica-Bold')
          .text('DECISIONES SOBRE LOS RESULTADOS DEL ESTUDIO:', 60);
 
-      doc.moveDown(1);
+      doc.moveDown(0.5);
 
       // Información sobre estado genético
       doc.fontSize(10)
@@ -254,7 +254,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .font('Helvetica')
          .text('recibir información sobre mi estado genético');
 
-      doc.moveDown(1.5);
+      doc.moveDown();
 
       // Información sobre biomarcadores
       doc.fontSize(10)
@@ -325,7 +325,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
 
       doc.text('Si hubiera excedente de mis muestras, afirmo haber sido advertido sobre las opciones de destino al finalizar el proyecto de investigación. En este sentido:');
 
-      doc.moveDown(1);
+      doc.moveDown(0.5);
 
       currentY = doc.y;
       addCheckbox(60, currentY, data.biobank?.incorporation);
@@ -395,7 +395,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .font('Helvetica')
          .text('investigación biomédica (preferentemente en enfermedades priónicas)');
 
-      doc.moveDown(1);
+      doc.moveDown(0.5);
 
       currentY = doc.y;
       addCheckbox(60, currentY, data.biobank?.destruction);
@@ -421,7 +421,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
           doc.image(signatureBuffer, 60, doc.y, {
             fit: [200, 80]
           });
-          doc.moveDown(2);
+          doc.moveDown(3);
         } catch (err) {
           doc.moveDown(3);
         }
@@ -480,7 +480,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
         doc.image(izaroSignaturePath, 60, doc.y, {
           fit: [150, 60]
         });
-        doc.moveDown(2);
+        doc.moveDown(3);
       } else {
         doc.moveDown(3);
       }
