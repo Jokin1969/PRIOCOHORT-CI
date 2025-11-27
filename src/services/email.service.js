@@ -3,6 +3,10 @@ let nodemailer = null;
 try {
   nodemailer = require('nodemailer');
   console.log('✅ Nodemailer module loaded successfully');
+  console.log('🔍 Nodemailer module inspection:');
+  console.log(`   Type: ${typeof nodemailer}`);
+  console.log(`   Keys: ${Object.keys(nodemailer).join(', ')}`);
+  console.log(`   Has createTransport: ${typeof nodemailer.createTransport}`);
 } catch (error) {
   console.error('❌ Failed to load nodemailer module:', error.message);
   console.error('   This usually means nodemailer is not installed.');
@@ -34,8 +38,8 @@ class EmailService {
       }
 
       // Additional check
-      if (typeof nodemailer.createTransporter !== 'function') {
-        console.log('⚠️  Nodemailer loaded but createTransporter not available.');
+      if (typeof nodemailer.createTransport !== 'function') {
+        console.log('⚠️  Nodemailer loaded but createTransport not available.');
         console.log('   Nodemailer version may be incompatible.');
         this.isInitialized = false;
         return;
@@ -69,7 +73,7 @@ class EmailService {
         }
       };
 
-      this.transporter = nodemailer.createTransporter(smtpConfig);
+      this.transporter = nodemailer.createTransport(smtpConfig);
       this.isInitialized = true;
       console.log('✅ Email service initialized successfully');
     } catch (error) {
