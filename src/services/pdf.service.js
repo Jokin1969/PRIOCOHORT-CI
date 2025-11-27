@@ -56,9 +56,13 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
       const addCheckbox = (x, y, checked = false) => {
         doc.rect(x, y, 10, 10).stroke();
         if (checked) {
-          doc.fontSize(12)
-             .font('Helvetica-Bold')
-             .text('✓', x, y);
+          // Dibujar una X que cubra todo el cuadrado
+          doc.moveTo(x + 1, y + 1)
+             .lineTo(x + 9, y + 9)
+             .stroke();
+          doc.moveTo(x + 9, y + 1)
+             .lineTo(x + 1, y + 9)
+             .stroke();
         }
       };
 
@@ -283,14 +287,14 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
       doc.addPage();
       addHeader();
 
-      doc.moveDown(2);
+      doc.moveDown(3);
 
       // ¿QUÉ OCURRE CON SUS MUESTRAS AL TERMINAR?
       doc.fontSize(11)
          .font('Helvetica-Bold')
          .text('¿QUÉ OCURRE CON SUS MUESTRAS AL TERMINAR?', 60);
 
-      doc.moveDown(1.5);
+      doc.moveDown(0.5);
 
       doc.fontSize(9)
          .font('Helvetica')
@@ -312,7 +316,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
 
       doc.text('Si hubiera excedente de mis muestras, afirmo haber sido advertido sobre las opciones de destino al finalizar el proyecto de investigación. En este sentido:');
 
-      doc.moveDown(0.5);
+      doc.moveDown(1.5);
 
       currentY = doc.y;
       addCheckbox(60, currentY, data.biobank?.incorporation);
@@ -382,7 +386,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .font('Helvetica')
          .text('investigación biomédica (preferentemente en enfermedades priónicas)');
 
-      doc.moveDown(0.5);
+      doc.moveDown(1.5);
 
       currentY = doc.y;
       addCheckbox(60, currentY, data.biobank?.destruction);
