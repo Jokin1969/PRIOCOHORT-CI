@@ -215,7 +215,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .font('Helvetica-Oblique')
          .text('Tras haber sido advertido sobre la posibilidad de recibir información derivada de los análisis genéticos que se realicen sobre mi muestra biológica:');
 
-      doc.moveDown(0.5);
+      doc.moveDown(1.5);
 
       const geneticYes = data.decisions?.geneticInfo === 'si-solicito';
       const geneticNo = data.decisions?.geneticInfo === 'no-quiero';
@@ -244,13 +244,13 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
       doc.fontSize(10)
          .font('Helvetica-Bold')
          .fillColor('black')
-         .text('Información sobre sus biomarcadores de progresión:');
+         .text('Información sobre sus biomarcadores de progresión:', 60);
 
       doc.fontSize(9)
          .font('Helvetica-Oblique')
-         .text('Independientemente de la decisión anterior, tras haber sido advertido sobre la posibilidad de recibir información derivada de los análisis realizados sobre mis muestras:');
+         .text('Independientemente de la decisión anterior, tras haber sido advertido sobre la posibilidad de recibir información derivada de los análisis realizados sobre mis muestras:', 60);
 
-      doc.moveDown(0.3);
+      doc.moveDown(1.5);
 
       const biomarkersYes = data.decisions?.biomarkers === 'si-solicito';
       const biomarkersNo = data.decisions?.biomarkers === 'no-quiero';
