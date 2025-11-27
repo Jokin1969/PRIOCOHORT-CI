@@ -96,6 +96,13 @@ class DropboxService {
       return; // Using static access token
     }
 
+    // Refresh if we don't have an access token yet
+    if (!this.accessToken) {
+      console.log('🔄 No access token found, generating from refresh token...');
+      await this.refreshAccessToken();
+      return;
+    }
+
     // Refresh if token expires in less than 5 minutes
     if (this.tokenExpiresAt && (Date.now() + 5 * 60 * 1000) >= this.tokenExpiresAt) {
       await this.refreshAccessToken();
