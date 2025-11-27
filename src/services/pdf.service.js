@@ -5,9 +5,10 @@ const path = require('path');
 /**
  * Genera el PDF del consentimiento informado con formato oficial
  * @param {Object} data - Datos del consentimiento
+ * @param {Object} options - Opciones de generación (copyFor: 'donante' | 'investigadora')
  * @returns {Promise<Buffer>} Buffer del PDF generado
  */
-async function generatePDF(data) {
+async function generatePDF(data, options = { copyFor: 'donante' }) {
   return new Promise((resolve, reject) => {
     try {
       const doc = new PDFDocument({
@@ -42,9 +43,13 @@ async function generatePDF(data) {
            .font('Helvetica')
            .text('Versión 1 (1 de diciembre 2025)', 400, 30, { align: 'right', width: 150 });
 
+        const copyText = options.copyFor === 'investigadora'
+          ? 'Copia para la Dra. Izaro Kortazar'
+          : 'Copia para el donante';
+
         doc.fontSize(8)
            .font('Helvetica-Bold')
-           .text('Copia para el donante', 400, 45, { align: 'right', width: 150 });
+           .text(copyText, 400, 45, { align: 'right', width: 150 });
       };
 
       // Función para añadir checkbox
@@ -63,13 +68,15 @@ async function generatePDF(data) {
       // ==================== PÁGINA 1 ====================
       addHeader();
 
-      // Título principal
+      // Título principal (centrado y en azul oscuro)
       doc.fontSize(14)
          .font('Helvetica-Bold')
+         .fillColor('#003366')
          .text('CONSENTIMIENTO PARA LA REALIZACIÓN DEL PROYECTO DE INVESTIGACIÓN', 60, 90, {
            width: pageWidth,
            align: 'center'
-         });
+         })
+         .fillColor('black');
 
       doc.moveDown(0.5);
 

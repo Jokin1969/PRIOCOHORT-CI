@@ -1,5 +1,6 @@
 const pdfService = require('../services/pdf.service');
 const dropboxSyncService = require('../services/dropbox-sync.service');
+const emailService = require('../services/email.service');
 const fs = require('fs').promises;
 const path = require('path');
 
@@ -18,13 +19,13 @@ exports.generateConsentPDF = async (req, res) => {
       });
     }
 
-    // Generar PDF
-    const pdfBuffer = await pdfService.generatePDF(consentData);
+    // Generar PDF para el donante
+    const pdfBufferDonante = await pdfService.generatePDF(consentData, { copyFor: 'donante' });
 
     // Upload to Dropbox (non-blocking)
     dropboxSyncService.uploadSignedConsent(
-      consentData.dni,
-      pdfBuffer,
+      consentData.txprCode,
+      pdfBufferDonante,
       {
         name: consentData.name,
         lastName: consentData.lastName,
@@ -38,7 +39,7 @@ exports.generateConsentPDF = async (req, res) => {
     // Configurar headers para descarga
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="${consentData.txprCode || 'consentimiento'}.pdf"`);
-    res.send(pdfBuffer);
+    res.send(pdfBufferDonante);
   } catch (error) {
     console.error('Error generando PDF:', error);
     res.status(500).json({
@@ -63,15 +64,17 @@ exports.saveConsent = async (req, res) => {
     const localPath = path.join(savePath, filename);
     await fs.writeFile(localPath, JSON.stringify(consentData, null, 2));
 
-    // Upload to Dropbox (if configured)
+    // Generate and upload PDFs (if signatures are present)
     let dropboxResult = null;
+    let emailResult = null;
+
     try {
-      // Generate PDF if signatures are present
-      if (consentData.patientSignature || consentData.representativeSignature) {
-        const pdfBuffer = await pdfService.generatePDF(consentData);
+      if (consentData.signature) {
+        // Generate PDF for donante (to Dropbox)
+        const pdfBufferDonante = await pdfService.generatePDF(consentData, { copyFor: 'donante' });
         dropboxResult = await dropboxSyncService.uploadSignedConsent(
-          consentData.dni,
-          pdfBuffer,
+          consentData.txprCode,
+          pdfBufferDonante,
           {
             name: consentData.name,
             lastName: consentData.lastName,
@@ -79,17 +82,32 @@ exports.saveConsent = async (req, res) => {
             submittedAt: new Date().toISOString()
           }
         );
+
+        // Generate PDF for investigadora (to email)
+        const pdfBufferInvestigadora = await pdfService.generatePDF(consentData, { copyFor: 'investigadora' });
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+        const emailFilename = `${consentData.txprCode}_${timestamp}.pdf`;
+
+        // Send email to jcastilla@cicbiogune.es
+        emailResult = await emailService.sendConsentEmail({
+          to: 'jcastilla@cicbiogune.es',
+          txprCode: consentData.txprCode,
+          participantName: `${consentData.name} ${consentData.lastName}`,
+          pdfBuffer: pdfBufferInvestigadora,
+          filename: emailFilename
+        });
       }
-    } catch (dropboxError) {
-      console.error('⚠️  Error al subir a Dropbox:', dropboxError.message);
-      // Continue even if Dropbox upload fails
+    } catch (error) {
+      console.error('⚠️  Error al procesar PDFs:', error.message);
+      // Continue even if upload/email fails
     }
 
     res.json({
       success: true,
       message: 'Consentimiento guardado correctamente',
       filename,
-      dropboxUpload: dropboxResult?.success || false
+      dropboxUpload: dropboxResult?.success || false,
+      emailSent: emailResult?.success || false
     });
   } catch (error) {
     console.error('Error guardando consentimiento:', error);

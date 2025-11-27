@@ -118,11 +118,11 @@ class DropboxSyncService {
 
   /**
    * Upload signed consent PDF to Dropbox
-   * @param {string} dni - Patient DNI
+   * @param {string} txprCode - Patient TXPR code
    * @param {Buffer} pdfBuffer - PDF file buffer
    * @param {Object} metadata - Additional metadata
    */
-  async uploadSignedConsent(dni, pdfBuffer, metadata = {}) {
+  async uploadSignedConsent(txprCode, pdfBuffer, metadata = {}) {
     if (!dropboxService.isConfigured()) {
       console.log('⚠️  Dropbox not configured. Signed consent not uploaded to cloud.');
       return {
@@ -136,7 +136,7 @@ class DropboxSyncService {
       await this.ensureSignedCIFolder();
 
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
-      const filename = `consent_${dni}_${timestamp}.pdf`;
+      const filename = `${txprCode}_${timestamp}.pdf`;
       const dropboxPath = `${this.signedCIPath}/${filename}`;
 
       console.log(`⬆️  Uploading signed consent to Dropbox: ${filename}`);
