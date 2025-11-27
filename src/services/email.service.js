@@ -70,7 +70,10 @@ class EmailService {
         auth: {
           user: process.env.SMTP_USER,
           pass: process.env.SMTP_PASS
-        }
+        },
+        connectionTimeout: 10000, // 10 seconds
+        greetingTimeout: 10000,   // 10 seconds
+        socketTimeout: 30000      // 30 seconds
       };
 
       this.transporter = nodemailer.createTransport(smtpConfig);
@@ -145,8 +148,17 @@ class EmailService {
       };
 
       console.log(`📧 Enviando email a ${to}...`);
+      console.log(`   Tamaño del PDF: ${Math.round(pdfBuffer.length / 1024)} KB`);
 
-      const info = await this.transporter.sendMail(mailOptions);
+      // Set a timeout for the email sending operation
+      const sendWithTimeout = Promise.race([
+        this.transporter.sendMail(mailOptions),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Email send timeout after 45 seconds')), 45000)
+        )
+      ]);
+
+      const info = await sendWithTimeout;
 
       console.log(`✅ Email enviado exitosamente: ${info.messageId}`);
 
@@ -157,9 +169,16 @@ class EmailService {
       };
     } catch (error) {
       console.error('❌ Error enviando email:', error.message);
+      console.error('   Error details:', {
+        code: error.code,
+        command: error.command,
+        response: error.response,
+        responseCode: error.responseCode
+      });
       return {
         success: false,
-        error: error.message
+        error: error.message,
+        errorCode: error.code
       };
     }
   }
