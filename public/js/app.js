@@ -178,7 +178,7 @@ function showIndexModal() {
     const modalContent = document.createElement('div');
     modalContent.className = 'modal-content index-modal-content';
 
-    let indexHTML = '<h3>Índice de la Hoja Informativa</h3><div class="index-list">';
+    let indexHTML = '<h3>Índice de la hoja informativa</h3><div class="index-list">';
 
     // Crear lista de secciones
     INFORMATION_SECTIONS.forEach((sectionKey, index) => {

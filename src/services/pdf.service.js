@@ -49,11 +49,14 @@ async function generatePDF(data) {
 
       // Función para añadir checkbox
       const addCheckbox = (x, y, checked = false) => {
-        doc.rect(x, y, 10, 10).stroke();
         if (checked) {
+          // Solo mostrar el tick cuando está seleccionado
           doc.fontSize(10)
              .font('Helvetica-Bold')
-             .text('✓', x + 2, y + 1);
+             .text('✓', x, y);
+        } else {
+          // Mostrar cuadrado vacío cuando no está seleccionado
+          doc.rect(x, y, 10, 10).stroke();
         }
       };
 
@@ -124,7 +127,9 @@ async function generatePDF(data) {
       // Checkbox 2: He recibido información clara
       currentY = doc.y;
       addCheckbox(60, currentY, data.consent?.receivedInformation);
-      doc.text('He recibido información clara sobre las características del estudio, incluyendo:', 75, currentY);
+      doc.fontSize(9)
+         .font('Helvetica')
+         .text('He recibido información clara sobre las características del estudio, incluyendo:', 75, currentY);
 
       doc.moveDown(0.3);
       const bulletPoints1 = [
@@ -135,7 +140,7 @@ async function generatePDF(data) {
       ];
 
       bulletPoints1.forEach(point => {
-        doc.fontSize(9).text('• ' + point, 85);
+        doc.fontSize(9).font('Helvetica').text('• ' + point, 85);
       });
 
       doc.moveDown(0.5);
@@ -143,7 +148,9 @@ async function generatePDF(data) {
       // Checkbox 3: Comprendo que
       currentY = doc.y;
       addCheckbox(60, currentY, data.consent?.understand);
-      doc.fontSize(9).text('Comprendo que:', 75, currentY);
+      doc.fontSize(9)
+         .font('Helvetica')
+         .text('Comprendo que:', 75, currentY);
 
       doc.moveDown(0.3);
       const bulletPoints2 = [
@@ -155,15 +162,15 @@ async function generatePDF(data) {
       ];
 
       bulletPoints2.forEach(point => {
-        doc.fontSize(9).text('• ' + point, 85);
+        doc.fontSize(9).font('Helvetica').text('• ' + point, 85);
       });
 
-      doc.moveDown();
+      doc.moveDown(1.5);
 
       // CONSENTIMIENTO PRINCIPAL
       doc.fontSize(11)
          .font('Helvetica-Bold')
-         .text('CONSENTIMIENTO PRINCIPAL:');
+         .text('CONSENTIMIENTO PRINCIPAL:', 60);
 
       doc.moveDown(0.3);
 
@@ -190,16 +197,15 @@ async function generatePDF(data) {
       // DECISIONES SOBRE RESULTADOS DEL ESTUDIO
       doc.fontSize(11)
          .font('Helvetica-Bold')
-         .text('DECISIONES SOBRE LOS RESULTADOS DEL ESTUDIO:');
+         .text('DECISIONES SOBRE LOS RESULTADOS DEL ESTUDIO:', 60);
 
       doc.moveDown(0.5);
 
-      // 🧬 Información sobre estado genético
+      // Información sobre estado genético
       doc.fontSize(10)
          .font('Helvetica-Bold')
-         .fillColor('purple')
-         .text('🧬 Información sobre estado genético:')
-         .fillColor('black');
+         .fillColor('black')
+         .text('Información sobre su estado genético:');
 
       doc.fontSize(9)
          .font('Helvetica-Oblique')
@@ -230,12 +236,11 @@ async function generatePDF(data) {
 
       doc.moveDown();
 
-      // 🔬 Información sobre biomarcadores
+      // Información sobre biomarcadores
       doc.fontSize(10)
          .font('Helvetica-Bold')
-         .fillColor('blue')
-         .text('🔬 Información sobre biomarcadores de progresión:')
-         .fillColor('black');
+         .fillColor('black')
+         .text('Información sobre sus biomarcadores de progresión:');
 
       doc.fontSize(9)
          .font('Helvetica-Oblique')
@@ -273,7 +278,7 @@ async function generatePDF(data) {
       // ¿QUÉ OCURRE CON SUS MUESTRAS AL TERMINAR?
       doc.fontSize(11)
          .font('Helvetica-Bold')
-         .text('¿QUÉ OCURRE CON SUS MUESTRAS AL TERMINAR?');
+         .text('¿QUÉ OCURRE CON SUS MUESTRAS AL TERMINAR?', 60);
 
       doc.moveDown(0.5);
 
@@ -401,11 +406,15 @@ async function generatePDF(data) {
         doc.moveDown(3);
       }
 
+      // Formatear la fecha actual
+      const currentDate = new Date();
+      const formattedDate = `${currentDate.getDate().toString().padStart(2, '0')}/${(currentDate.getMonth() + 1).toString().padStart(2, '0')}/${currentDate.getFullYear()}`;
+
       doc.fontSize(9)
          .font('Helvetica')
          .text('______________________________', 60)
          .text('Firma del donante', 60)
-         .text('                                                    Fecha ______________', 60);
+         .text(`                                                    Fecha: ${formattedDate}`, 60);
 
       doc.moveDown(2);
 
