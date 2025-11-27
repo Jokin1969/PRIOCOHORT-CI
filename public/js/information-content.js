@@ -8,13 +8,13 @@ const INFORMATION_CONTENT = {
         content: `
             <div class="info-header-section">
                 <h1>Cohorte prospectiva de familias con enfermedades priónicas: recopilación de muestras biológicas para el análisis de potenciales biomarcadores diagnósticos y pronósticos y caracterización de la historia natural</h1>
-                <h2>(PRIOCOHORT)</h2>
+                <h2 style="text-align: center;">(PRIOCOHORT)</h2>
 
                 <div class="study-info">
                     <h3>INVESTIGADORES PRINCIPALES:</h3>
                     <ul>
-                        <li>Dra. Izaro Kortazar - Hospital Universitario Araba (Coordinadora Clínica) - <a href="mailto:izaro.kortazarzubizarreta@osakidetza.eus">izaro.kortazarzubizarreta@osakidetza.eus</a></li>
-                        <li>Dr. Joaquín Castilla - CIC bioGUNE (Coordinador Científico) - <a href="mailto:jcastilla@cicbiogune.es">jcastilla@cicbiogune.es</a></li>
+                        <li><a href="mailto:izaro.kortazarzubizarreta@osakidetza.eus">Dra. Izaro Kortazar</a> - Hospital Universitario Araba (Coordinadora Clínica)</li>
+                        <li><a href="mailto:jcastilla@cicbiogune.es">Dr. Joaquín Castilla</a> - CIC bioGUNE (Coordinador Científico)</li>
                     </ul>
                 </div>
 
@@ -763,11 +763,11 @@ const INFORMATION_CONTENT = {
             </div>
 
             <div class="contact-box">
-                <h3><a href="http://www.fundacionprionicas.org" target="_blank">🤝 FEEP - Fundación Española de Enfermedades Priónicas</a></h3>
+                <h3>🤝 <a href="http://www.fundacionprionicas.org" target="_blank">FEEP - Fundación Española de Enfermedades Priónicas</a></h3>
             </div>
 
             <div class="contact-box">
-                <h3><a href="http://www.osakidetza.euskadi.eus/protecciondatos" target="_blank">🔒 Para cuestiones sobre protección de datos (Osakidetza)</a></h3>
+                <h3>🔒 <a href="http://www.osakidetza.euskadi.eus/protecciondatos" target="_blank">Para cuestiones sobre protección de datos (Osakidetza)</a></h3>
             </div>
 
             <div class="final-message">
