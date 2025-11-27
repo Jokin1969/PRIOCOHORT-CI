@@ -97,7 +97,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .text('(PRIOCOHORT)')
          .fillColor('black');
 
-      doc.moveDown();
+      doc.moveDown(2);
 
       // Yo, ... con DNI
       doc.fontSize(10)
@@ -203,7 +203,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .font('Helvetica-Bold')
          .text('DECISIONES SOBRE LOS RESULTADOS DEL ESTUDIO:', 60);
 
-      doc.moveDown(0.5);
+      doc.moveDown(1.5);
 
       // Información sobre estado genético
       doc.fontSize(10)
