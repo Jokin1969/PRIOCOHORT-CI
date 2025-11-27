@@ -1,4 +1,5 @@
 const pdfService = require('../services/pdf.service');
+const dropboxSyncService = require('../services/dropbox-sync.service');
 const fs = require('fs').promises;
 const path = require('path');
 
@@ -20,6 +21,20 @@ exports.generateConsentPDF = async (req, res) => {
     // Generar PDF
     const pdfBuffer = await pdfService.generatePDF(consentData);
 
+    // Upload to Dropbox (non-blocking)
+    dropboxSyncService.uploadSignedConsent(
+      consentData.dni,
+      pdfBuffer,
+      {
+        name: consentData.name,
+        lastName: consentData.lastName,
+        txprCode: consentData.txprCode,
+        submittedAt: new Date().toISOString()
+      }
+    ).catch(error => {
+      console.error('⚠️  No se pudo subir a Dropbox, pero el PDF se generó correctamente:', error.message);
+    });
+
     // Configurar headers para descarga
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="${consentData.txprCode || 'consentimiento'}.pdf"`);
@@ -34,27 +49,47 @@ exports.generateConsentPDF = async (req, res) => {
 };
 
 /**
- * Guarda el consentimiento (placeholder para futura sincronización con Dropbox)
+ * Guarda el consentimiento con sincronización en Dropbox
  */
 exports.saveConsent = async (req, res) => {
   try {
     const consentData = req.body;
 
-    // TODO: Implementar sincronización con Dropbox
-    // Por ahora, guardar localmente
+    // Guardar localmente
     const savePath = path.join(__dirname, '../../data/signed-consents');
     await fs.mkdir(savePath, { recursive: true });
 
     const filename = `${consentData.txprCode || 'consent'}_${Date.now()}.json`;
-    await fs.writeFile(
-      path.join(savePath, filename),
-      JSON.stringify(consentData, null, 2)
-    );
+    const localPath = path.join(savePath, filename);
+    await fs.writeFile(localPath, JSON.stringify(consentData, null, 2));
+
+    // Upload to Dropbox (if configured)
+    let dropboxResult = null;
+    try {
+      // Generate PDF if signatures are present
+      if (consentData.patientSignature || consentData.representativeSignature) {
+        const pdfBuffer = await pdfService.generatePDF(consentData);
+        dropboxResult = await dropboxSyncService.uploadSignedConsent(
+          consentData.dni,
+          pdfBuffer,
+          {
+            name: consentData.name,
+            lastName: consentData.lastName,
+            txprCode: consentData.txprCode,
+            submittedAt: new Date().toISOString()
+          }
+        );
+      }
+    } catch (dropboxError) {
+      console.error('⚠️  Error al subir a Dropbox:', dropboxError.message);
+      // Continue even if Dropbox upload fails
+    }
 
     res.json({
       success: true,
       message: 'Consentimiento guardado correctamente',
-      filename
+      filename,
+      dropboxUpload: dropboxResult?.success || false
     });
   } catch (error) {
     console.error('Error guardando consentimiento:', error);
