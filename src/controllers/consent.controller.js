@@ -76,17 +76,23 @@ exports.saveConsent = async (req, res) => {
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
         const emailFilename = `${consentData.txprCode}_${timestamp}.pdf`;
 
-        // Send email to jcastilla@cicbiogune.es
-        emailResult = await emailService.sendConsentEmail({
-          to: 'jcastilla@cicbiogune.es',
-          txprCode: consentData.txprCode,
-          participantName: `${consentData.name} ${consentData.lastName}`,
-          pdfBuffer: pdfBufferInvestigadora,
-          filename: emailFilename
-        });
+        // Execute email and CSV in parallel (don't block each other)
+        const [emailResultRaw, csvResultRaw] = await Promise.allSettled([
+          // Send email to jcastilla@cicbiogune.es
+          emailService.sendConsentEmail({
+            to: 'jcastilla@cicbiogune.es',
+            txprCode: consentData.txprCode,
+            participantName: `${consentData.name} ${consentData.lastName}`,
+            pdfBuffer: pdfBufferInvestigadora,
+            filename: emailFilename
+          }),
+          // Add consent responses to CSV in Dropbox
+          csvResponsesService.addConsentResponse(consentData)
+        ]);
 
-        // Add consent responses to CSV in Dropbox
-        csvResult = await csvResponsesService.addConsentResponse(consentData);
+        // Extract results
+        emailResult = emailResultRaw.status === 'fulfilled' ? emailResultRaw.value : { success: false, error: emailResultRaw.reason?.message };
+        csvResult = csvResultRaw.status === 'fulfilled' ? csvResultRaw.value : { success: false, error: csvResultRaw.reason?.message };
       }
     } catch (error) {
       console.error('⚠️  Error al procesar PDFs:', error.message);
