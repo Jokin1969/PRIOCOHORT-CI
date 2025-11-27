@@ -55,14 +55,27 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
       // Función para añadir checkbox
       const addCheckbox = (x, y, checked = false) => {
         if (checked) {
-          // Solo mostrar el tick cuando está seleccionado
-          doc.fontSize(10)
+          // Mostrar marca verde de OK cuando está seleccionado
+          doc.fillColor('#28a745')
+             .fontSize(12)
              .font('Helvetica-Bold')
-             .text('✓', x, y);
+             .text('✓', x, y)
+             .fillColor('black');
         } else {
           // Mostrar cuadrado vacío cuando no está seleccionado
           doc.rect(x, y, 10, 10).stroke();
         }
+      };
+
+      // Función para añadir numeración de página
+      const addPageNumber = (pageNum, totalPages) => {
+        doc.fontSize(9)
+           .font('Helvetica')
+           .fillColor('black')
+           .text(`${pageNum}/${totalPages}`, 0, doc.page.height - 40, {
+             align: 'center',
+             width: doc.page.width
+           });
       };
 
       // ==================== PÁGINA 1 ====================
@@ -87,7 +100,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .font('Helvetica')
          .text('Dra. Izaro Kortazar');
 
-      doc.moveDown(0.5);
+      doc.moveDown(1);
 
       // Título del proyecto
       doc.fontSize(10)
@@ -179,7 +192,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .font('Helvetica-Bold')
          .text('CONSENTIMIENTO PRINCIPAL:', 60);
 
-      doc.moveDown(0.3);
+      doc.moveDown(0.5);
 
       currentY = doc.y;
       addCheckbox(60, currentY, data.consent?.mainConsent1);
@@ -206,7 +219,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .font('Helvetica-Bold')
          .text('DECISIONES SOBRE LOS RESULTADOS DEL ESTUDIO:', 60);
 
-      doc.moveDown(0.5);
+      doc.moveDown(1);
 
       // Información sobre estado genético
       doc.fontSize(10)
@@ -241,7 +254,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .font('Helvetica')
          .text('recibir información sobre mi estado genético');
 
-      doc.moveDown();
+      doc.moveDown(1.5);
 
       // Información sobre biomarcadores
       doc.fontSize(10)
@@ -276,6 +289,9 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .font('Helvetica')
          .text('recibir información sobre progresión de la enfermedad');
 
+      // Numeración de página 1
+      addPageNumber(1, 2);
+
       // ==================== PÁGINA 2 ====================
       doc.addPage();
       addHeader();
@@ -309,7 +325,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
 
       doc.text('Si hubiera excedente de mis muestras, afirmo haber sido advertido sobre las opciones de destino al finalizar el proyecto de investigación. En este sentido:');
 
-      doc.moveDown(0.5);
+      doc.moveDown(1);
 
       currentY = doc.y;
       addCheckbox(60, currentY, data.biobank?.incorporation);
@@ -379,7 +395,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .font('Helvetica')
          .text('investigación biomédica (preferentemente en enfermedades priónicas)');
 
-      doc.moveDown(0.5);
+      doc.moveDown(1);
 
       currentY = doc.y;
       addCheckbox(60, currentY, data.biobank?.destruction);
@@ -405,7 +421,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
           doc.image(signatureBuffer, 60, doc.y, {
             fit: [200, 80]
           });
-          doc.moveDown(5);
+          doc.moveDown(2);
         } catch (err) {
           doc.moveDown(3);
         }
@@ -464,7 +480,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
         doc.image(izaroSignaturePath, 60, doc.y, {
           fit: [150, 60]
         });
-        doc.moveDown(4);
+        doc.moveDown(2);
       } else {
         doc.moveDown(3);
       }
@@ -473,6 +489,9 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .font('Helvetica')
          .text('______________________________', 60)
          .text('Firma de la Dra. Izaro Kortazar', 60);
+
+      // Numeración de página 2
+      addPageNumber(2, 2);
 
       // Finalizar documento
       doc.end();
