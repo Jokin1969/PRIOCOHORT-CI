@@ -639,6 +639,16 @@ h4 {
     margin-top: 0;
 }
 
+.contact-box h3 a {
+    color: #0066cc;
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+.contact-box h3 a:hover {
+    color: #004c99;
+}
+
 .contact-box ul,
 .contact-box li,
 .contact-box p,
@@ -648,12 +658,11 @@ h4 {
 
 .contact-box a {
     color: #0066cc;
-    text-decoration: none;
+    text-decoration: underline;
     font-weight: 600;
 }
 
 .contact-box a:hover {
-    text-decoration: underline;
     color: #004c99;
 }
 

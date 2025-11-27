@@ -747,39 +747,27 @@ const INFORMATION_CONTENT = {
             <h2 style="text-align: center;">¿CON QUIÉN PUEDO CONTACTAR SI TENGO DUDAS?</h2>
 
             <div class="contact-box">
-                <h3>📞 Dra. Izaro Kortazar (Coordinadora clínica)</h3>
+                <h3>📧 <a href="mailto:izaro.kortazarzubizarreta@osakidetza.eus">Dra. Izaro Kortazar</a></h3>
                 <ul>
                     <li><strong>Hospital:</strong> Hospital Universitario Araba</li>
-                    <li><strong>Teléfono:</strong> 945.00.70.00</li>
-                    <li><strong>Email:</strong> <a href="mailto:izaro.kortazarzubizarreta@osakidetza.eus">izaro.kortazarzubizarreta@osakidetza.eus</a></li>
+                    <li><strong>📞 Teléfono:</strong> 945.00.70.00</li>
                 </ul>
             </div>
 
             <div class="contact-box">
                 <h3>🔬 Equipos locales especializados</h3>
                 <ul>
-                    <li><strong>CIC bioGUNE:</strong> Dr. Joaquín Castilla (Investigación)
-                        <br>Email: <a href="mailto:jcastilla@cicbiogune.es">jcastilla@cicbiogune.es</a>
-                    </li>
-                    <li><strong>Cruces:</strong> Dra. Guiomar Pérez de Nanclares (Genética)
-                        <br>Email: <a href="mailto:guiomar.perezdenanclaresleal@osakidetza.eus">guiomar.perezdenanclaresleal@osakidetza.eus</a>
-                    </li>
+                    <li><strong>CIC bioGUNE:</strong> <a href="mailto:jcastilla@cicbiogune.es">Dr. Joaquín Castilla</a> (Investigación)</li>
+                    <li><strong>Cruces:</strong> <a href="mailto:guiomar.perezdenanclaresleal@osakidetza.eus">Dra. Guiomar Pérez de Nanclares</a> (Genética)</li>
                 </ul>
             </div>
 
             <div class="contact-box">
-                <h3>🤝 FEEP - Fundación Española de Enfermedades Priónicas</h3>
-                <ul>
-                    <li><strong>Web:</strong> <a href="http://www.fundacionprionicas.org" target="_blank">www.fundacionprionicas.org</a></li>
-                </ul>
+                <h3><a href="http://www.fundacionprionicas.org" target="_blank">🤝 FEEP - Fundación Española de Enfermedades Priónicas</a></h3>
             </div>
 
             <div class="contact-box">
-                <h3>🔒 Para cuestiones sobre protección de datos</h3>
-                <p><strong>Delegado de Protección de Datos - Osakidetza</strong></p>
-                <ul>
-                    <li><strong>Web:</strong> <a href="http://www.osakidetza.euskadi.eus/protecciondatos" target="_blank">www.osakidetza.euskadi.eus/protecciondatos</a></li>
-                </ul>
+                <h3><a href="http://www.osakidetza.euskadi.eus/protecciondatos" target="_blank">🔒 Para cuestiones sobre protección de datos (Osakidetza)</a></h3>
             </div>
 
             <div class="final-message">
