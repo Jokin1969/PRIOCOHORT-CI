@@ -290,7 +290,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .font('Helvetica-Bold')
          .text('¿QUÉ OCURRE CON SUS MUESTRAS AL TERMINAR?', 60);
 
-      doc.moveDown(0.5);
+      doc.moveDown(1.5);
 
       doc.fontSize(9)
          .font('Helvetica')
@@ -322,7 +322,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .font('Helvetica')
          .text('la incorporación del excedente en el Biobanco Vasco');
 
-      doc.moveDown(0.5);
+      doc.moveDown(1.5);
 
       // Tipo de donación
       doc.fontSize(10)
@@ -392,7 +392,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .font('Helvetica')
          .text('la destrucción de la muestra excedente');
 
-      doc.moveDown(2);
+      doc.moveDown(3);
 
       // FIRMAS Y FECHAS
       doc.fontSize(11)
