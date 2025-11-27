@@ -543,7 +543,7 @@ function setupSignaturePad() {
             alert('Error de conexión. Por favor, verifique su conexión e inténtelo de nuevo.');
         } finally {
             submitBtn.disabled = false;
-            submitBtn.textContent = '✓ Enviar Consentimiento';
+            submitBtn.textContent = '✓ Enviar consentimiento';
         }
     });
 

@@ -84,7 +84,7 @@
                         <div class="checkbox-group">
                             <input type="checkbox" id="check-read-sheet">
                             <label for="check-read-sheet">
-                                He leído la hoja de información, de la que se me ha entregado una copia (o me la he podido descargar)
+                                He leído la hoja de información y he recibido una copia, en papel o en formato descargable
                             </label>
                         </div>
 
@@ -92,7 +92,7 @@
                             <div class="checkbox-group">
                                 <input type="checkbox" id="check-received-info">
                                 <label for="check-received-info">
-                                    He recibido información clara sobre las características del estudio
+                                    He recibido una información clara sobre las características del estudio
                                 </label>
                             </div>
                         </div>
@@ -142,7 +142,7 @@
                     <div id="section-decisions" class="consent-section">
                         <h3>DECISIONES SOBRE RESULTADOS DEL ESTUDIO</h3>
 
-                        <h4>Información sobre estado genético:</h4>
+                        <h4>Información sobre su estado genético:</h4>
                         <div class="radio-group">
                             <input type="radio" name="genetic-info" id="genetic-yes" value="quiero">
                             <label for="genetic-yes">Quiero ser informado</label>
@@ -151,12 +151,8 @@
                             <input type="radio" name="genetic-info" id="genetic-no" value="no-quiero">
                             <label for="genetic-no">No quiero ser informado</label>
                         </div>
-                        <div class="radio-group">
-                            <input type="radio" name="genetic-info" id="genetic-delegate" value="delego">
-                            <label for="genetic-delegate">Delego la decisión</label>
-                        </div>
 
-                        <h4>Información sobre biomarcadores de progresión:</h4>
+                        <h4>Información sobre sus biomarcadores de progresión:</h4>
                         <div class="radio-group">
                             <input type="radio" name="biomarkers" id="biomarkers-yes" value="quiero">
                             <label for="biomarkers-yes">Quiero ser informado</label>
@@ -221,7 +217,7 @@
                         <p>
                             Por favor, firme en el recuadro inferior para confirmar su consentimiento informado.
                             Una vez firmado y enviado, se generará un PDF que será enviado a la Dra. Izaro Kortazar
-                            y usted recibirá una copia para sus registros.
+                            y usted recibirá una copia para sus registros, que podrá descargarse desde esta aplicación.
                         </p>
 
                         <div class="signature-container">
@@ -248,7 +244,7 @@
 
                         <div class="navigation-buttons">
                             <button id="btn-back-consent-4" class="btn btn-secondary">← Anterior</button>
-                            <button id="btn-submit-consent" class="btn btn-success" disabled>✓ Enviar Consentimiento</button>
+                            <button id="btn-submit-consent" class="btn btn-success" disabled>✓ Enviar consentimiento</button>
                         </div>
                     </div>
                 </div>
@@ -263,7 +259,7 @@
                     <h2>Consentimiento enviado correctamente</h2>
                     <p>
                         Su consentimiento informado ha sido procesado y enviado correctamente a la
-                        Dra. Izaro Kortazar (izaro.kortazarzubizarreta@osakidetza.eus).
+                        Dra. Izaro Kortazar (izaro.kortazarzubizarreta@osakidetza.eus)
                     </p>
                     <p>
                         <strong>Código de seguimiento:</strong> <span id="txpr-code-display"></span>
@@ -271,9 +267,11 @@
                     <p>
                         Puede descargar una copia del documento firmado para sus registros:
                     </p>
-                    <button id="btn-download-final-pdf" class="btn btn-primary btn-large">
-                        📥 Descargar PDF del Consentimiento
-                    </button>
+                    <div style="text-align: center;">
+                        <button id="btn-download-final-pdf" class="btn btn-primary btn-large">
+                            📥 Descargar PDF del Consentimiento
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
