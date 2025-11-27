@@ -62,17 +62,6 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
         }
       };
 
-      // Función para añadir numeración de página
-      const addPageNumber = (pageNum, totalPages) => {
-        doc.fontSize(9)
-           .font('Helvetica')
-           .fillColor('black')
-           .text(`${pageNum}/${totalPages}`, 0, doc.page.height - 40, {
-             align: 'center',
-             width: doc.page.width
-           });
-      };
-
       // ==================== PÁGINA 1 ====================
       addHeader();
 
@@ -226,7 +215,7 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .font('Helvetica-Oblique')
          .text('Tras haber sido advertido sobre la posibilidad de recibir información derivada de los análisis genéticos que se realicen sobre mi muestra biológica:');
 
-      doc.moveDown(0.3);
+      doc.moveDown(0.5);
 
       const geneticYes = data.decisions?.geneticInfo === 'si-solicito';
       const geneticNo = data.decisions?.geneticInfo === 'no-quiero';
@@ -284,8 +273,11 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .font('Helvetica')
          .text('recibir información sobre progresión de la enfermedad');
 
-      // Numeración de página 1
-      addPageNumber(1, 2);
+      // Número de página 1
+      doc.fontSize(9)
+         .font('Helvetica')
+         .fillColor('black')
+         .text('1/2', 60, 780, { align: 'center', width: pageWidth });
 
       // ==================== PÁGINA 2 ====================
       doc.addPage();
@@ -485,8 +477,11 @@ async function generatePDF(data, options = { copyFor: 'donante' }) {
          .text('______________________________', 60)
          .text('Firma de la Dra. Izaro Kortazar', 60);
 
-      // Numeración de página 2
-      addPageNumber(2, 2);
+      // Número de página 2
+      doc.fontSize(9)
+         .font('Helvetica')
+         .fillColor('black')
+         .text('2/2', 60, 780, { align: 'center', width: pageWidth });
 
       // Finalizar documento
       doc.end();
