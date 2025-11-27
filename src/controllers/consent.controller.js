@@ -1,6 +1,7 @@
 const pdfService = require('../services/pdf.service');
 const dropboxSyncService = require('../services/dropbox-sync.service');
 const emailService = require('../services/email.service');
+const csvResponsesService = require('../services/csv-responses.service');
 const fs = require('fs').promises;
 const path = require('path');
 
@@ -53,6 +54,7 @@ exports.saveConsent = async (req, res) => {
     // Generate and upload PDFs (if signatures are present)
     let dropboxResult = null;
     let emailResult = null;
+    let csvResult = null;
 
     try {
       if (consentData.signature) {
@@ -82,6 +84,9 @@ exports.saveConsent = async (req, res) => {
           pdfBuffer: pdfBufferInvestigadora,
           filename: emailFilename
         });
+
+        // Add consent responses to CSV in Dropbox
+        csvResult = await csvResponsesService.addConsentResponse(consentData);
       }
     } catch (error) {
       console.error('⚠️  Error al procesar PDFs:', error.message);
@@ -93,7 +98,8 @@ exports.saveConsent = async (req, res) => {
       message: 'Consentimiento guardado correctamente',
       filename,
       dropboxUpload: dropboxResult?.success || false,
-      emailSent: emailResult?.success || false
+      emailSent: emailResult?.success || false,
+      csvSaved: csvResult?.success || false
     });
   } catch (error) {
     console.error('Error guardando consentimiento:', error);
