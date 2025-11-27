@@ -13,6 +13,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use('/docs', express.static('docs'));
 
 // Rutas API
 const dniRoutes = require('./src/routes/dni.routes');
