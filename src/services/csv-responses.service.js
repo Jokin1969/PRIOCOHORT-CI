@@ -108,12 +108,26 @@ class CSVResponsesService {
 
     try {
       const buffer = Buffer.from(csvContent, 'utf-8');
+
+      // Ensure the responses directory exists
+      const responsesDir = '/ConnectingPrion/priocohort/responses';
+      try {
+        await this.dropboxService.createFolder(responsesDir);
+        console.log(`📁 Created directory: ${responsesDir}`);
+      } catch (error) {
+        // Folder might already exist, that's OK
+        if (!error.error || error.error['.tag'] !== 'path' || error.error.path['.tag'] !== 'conflict') {
+          console.log(`ℹ️  Folder already exists or error: ${error.error_summary || error.message}`);
+        }
+      }
+
       await this.dropboxService.uploadFile(this.dropboxPath, buffer);
 
       console.log(`✅ CSV uploaded successfully to ${this.dropboxPath}`);
       return { success: true };
     } catch (error) {
       console.error('❌ Error uploading CSV to Dropbox:', error.message);
+      console.error('   Error details:', error.error || error);
       throw error;
     }
   }
