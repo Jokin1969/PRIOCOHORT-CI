@@ -149,10 +149,15 @@ class DropboxService {
     try {
       await this.ensureValidToken();
 
+      // Convert string mode to Dropbox API format
+      const writeMode = mode === 'overwrite'
+        ? { '.tag': 'overwrite' }
+        : { '.tag': 'add' };
+
       const response = await this.dbx.filesUpload({
         path,
         contents,
-        mode: mode,
+        mode: writeMode,
         autorename: false,
         mute: false,
         strict_conflict: false
