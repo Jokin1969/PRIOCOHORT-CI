@@ -89,11 +89,17 @@ class CSVResponsesService {
       const csvContent = csvBuffer.toString('utf-8');
       return csvContent;
     } catch (error) {
-      if (error.error && error.error['.tag'] === 'path' && error.error.path['.tag'] === 'not_found') {
+      // Check for file not found error (Dropbox error structure has nested error object)
+      if (error.error && error.error.error &&
+          error.error.error['.tag'] === 'path' &&
+          error.error.error.path &&
+          error.error.error.path['.tag'] === 'not_found') {
         // Archivo no existe, retornar null
         console.log('📝 CSV file does not exist yet, will create new one');
         return null;
       }
+      // Re-throw other errors
+      console.error('❌ Error downloading CSV:', error.error || error.message);
       throw error;
     }
   }
