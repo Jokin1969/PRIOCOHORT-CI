@@ -108,26 +108,13 @@ class CSVResponsesService {
 
     try {
       const buffer = Buffer.from(csvContent, 'utf-8');
-
-      // Ensure the responses directory exists
-      const responsesDir = '/ConnectingPrion/priocohort/responses';
-      try {
-        await this.dropboxService.createFolder(responsesDir);
-        console.log(`📁 Created directory: ${responsesDir}`);
-      } catch (error) {
-        // Folder might already exist, that's OK
-        if (!error.error || error.error['.tag'] !== 'path' || error.error.path['.tag'] !== 'conflict') {
-          console.log(`ℹ️  Folder already exists or error: ${error.error_summary || error.message}`);
-        }
-      }
-
       await this.dropboxService.uploadFile(this.dropboxPath, buffer);
 
       console.log(`✅ CSV uploaded successfully to ${this.dropboxPath}`);
       return { success: true };
     } catch (error) {
       console.error('❌ Error uploading CSV to Dropbox:', error.message);
-      console.error('   Error details:', error.error || error);
+      console.error('   Error details:', JSON.stringify(error.error || error, null, 2));
       throw error;
     }
   }
@@ -144,6 +131,15 @@ class CSVResponsesService {
     try {
       console.log(`📊 Adding consent response to CSV: ${consentData.txprCode}`);
 
+      // Ensure the responses directory exists first
+      const responsesDir = '/ConnectingPrion/priocohort/responses';
+      try {
+        await this.dropboxService.createFolder(responsesDir);
+      } catch (dirError) {
+        // Directory might already exist or we can't create it
+        console.log(`ℹ️  Directory check: ${dirError.message}`);
+      }
+
       // Descargar CSV existente (si existe)
       let csvContent = await this.downloadCSV();
       let lines = [];
@@ -152,6 +148,7 @@ class CSVResponsesService {
         lines = this.parseCSV(csvContent);
       } else {
         // Crear nuevo CSV con cabeceras
+        console.log('📝 Creating new CSV file with headers');
         const headers = this.getCSVHeaders();
         lines = [this.arrayToCSVLine(headers)];
       }
@@ -163,8 +160,9 @@ class CSVResponsesService {
       // Crear contenido CSV completo
       const updatedCSV = lines.join('\n') + '\n';
 
-      // Subir a Dropbox
-      await this.uploadCSV(updatedCSV);
+      // Subir a Dropbox with overwrite mode
+      const buffer = Buffer.from(updatedCSV, 'utf-8');
+      await this.dropboxService.uploadFile(this.dropboxPath, buffer, 'overwrite');
 
       console.log(`✅ Consent response added to CSV: ${consentData.txprCode}`);
       return {
@@ -174,6 +172,7 @@ class CSVResponsesService {
       };
     } catch (error) {
       console.error('❌ Error adding consent response to CSV:', error.message);
+      console.error('   Full error:', JSON.stringify(error, null, 2));
       return {
         success: false,
         error: error.message
