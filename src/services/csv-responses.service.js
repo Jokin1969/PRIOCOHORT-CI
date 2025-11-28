@@ -39,6 +39,9 @@ class CSVResponsesService {
   consentDataToCSVRow(consentData) {
     const boolToText = (value) => value ? 'SI' : 'NO';
 
+    // Si se solicita destrucción, tipo_donacion y uso_autorizado son ND
+    const destructionRequested = consentData.biobank?.destruction === true;
+
     return [
       consentData.txprCode || '',
       boolToText(consentData.consent?.readInformationSheet),
@@ -49,8 +52,8 @@ class CSVResponsesService {
       consentData.decisions?.geneticInfo === 'si-solicito' ? 'SI-SOLICITO' : 'NO-QUIERO',
       consentData.decisions?.biomarkers === 'si-solicito' ? 'SI-SOLICITO' : 'NO-QUIERO',
       boolToText(consentData.biobank?.incorporation),
-      consentData.biobank?.donationType === 'codificadas' ? 'CODIFICADAS' : 'ANONIMIZADAS',
-      consentData.biobank?.authorizedUse === 'solo-prion' ? 'SOLO-PRION' : 'CUALQUIER',
+      destructionRequested ? 'ND' : (consentData.biobank?.donationType === 'codificadas' ? 'CODIFICADAS' : 'ANONIMIZADAS'),
+      destructionRequested ? 'ND' : (consentData.biobank?.authorizedUse === 'solo-prion' ? 'SOLO-PRION' : 'CUALQUIER'),
       boolToText(consentData.biobank?.destruction)
     ];
   }
