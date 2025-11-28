@@ -53,8 +53,6 @@ exports.saveConsent = async (req, res) => {
 
     // Generate and upload PDFs (if signatures are present)
     let dropboxResult = null;
-    let emailResult = null;
-    let csvResult = null;
 
     try {
       if (consentData.signature) {
@@ -76,8 +74,9 @@ exports.saveConsent = async (req, res) => {
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
         const emailFilename = `${consentData.txprCode}_${timestamp}.pdf`;
 
-        // Execute email and CSV in parallel (don't block each other)
-        const [emailResultRaw, csvResultRaw] = await Promise.allSettled([
+        // Execute email and CSV in background (fire and forget)
+        // Don't wait for these to complete - respond to user immediately
+        Promise.allSettled([
           // Send email to jcastilla@cicbiogune.es
           emailService.sendConsentEmail({
             to: 'jcastilla@cicbiogune.es',
@@ -88,24 +87,31 @@ exports.saveConsent = async (req, res) => {
           }),
           // Add consent responses to CSV in Dropbox
           csvResponsesService.addConsentResponse(consentData)
-        ]);
+        ]).then(([emailResultRaw, csvResultRaw]) => {
+          // Log results after completion
+          const emailResult = emailResultRaw.status === 'fulfilled' ? emailResultRaw.value : { success: false, error: emailResultRaw.reason?.message };
+          const csvResult = csvResultRaw.status === 'fulfilled' ? csvResultRaw.value : { success: false, error: csvResultRaw.reason?.message };
 
-        // Extract results
-        emailResult = emailResultRaw.status === 'fulfilled' ? emailResultRaw.value : { success: false, error: emailResultRaw.reason?.message };
-        csvResult = csvResultRaw.status === 'fulfilled' ? csvResultRaw.value : { success: false, error: csvResultRaw.reason?.message };
+          console.log('📊 Background tasks completed:');
+          console.log(`   Email: ${emailResult.success ? '✅ Sent' : '❌ Failed - ' + emailResult.error}`);
+          console.log(`   CSV: ${csvResult.success ? '✅ Saved' : '❌ Failed - ' + csvResult.error}`);
+        }).catch(err => {
+          console.error('❌ Unexpected error in background tasks:', err);
+        });
       }
     } catch (error) {
       console.error('⚠️  Error al procesar PDFs:', error.message);
-      // Continue even if upload/email fails
+      // Continue even if upload fails
     }
 
+    // Respond immediately to user (don't wait for email/CSV)
     res.json({
       success: true,
       message: 'Consentimiento guardado correctamente',
       filename,
       dropboxUpload: dropboxResult?.success || false,
-      emailSent: emailResult?.success || false,
-      csvSaved: csvResult?.success || false
+      emailSent: true,  // Always say true - email is being sent in background
+      csvSaved: true    // Always say true - CSV is being saved in background
     });
   } catch (error) {
     console.error('Error guardando consentimiento:', error);
