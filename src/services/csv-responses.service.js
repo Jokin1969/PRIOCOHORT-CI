@@ -143,14 +143,17 @@ class CSVResponsesService {
       // Descargar CSV existente (si existe)
       let csvContent = await this.downloadCSV();
       let lines = [];
+      let fileExists = false;
 
       if (csvContent) {
         lines = this.parseCSV(csvContent);
+        fileExists = true;
       } else {
         // Crear nuevo CSV con cabeceras
         console.log('📝 Creating new CSV file with headers');
         const headers = this.getCSVHeaders();
         lines = [this.arrayToCSVLine(headers)];
+        fileExists = false;
       }
 
       // Añadir nueva fila
@@ -160,9 +163,11 @@ class CSVResponsesService {
       // Crear contenido CSV completo
       const updatedCSV = lines.join('\n') + '\n';
 
-      // Subir a Dropbox with overwrite mode
+      // Subir a Dropbox - usar 'add' si no existe, 'overwrite' si existe
       const buffer = Buffer.from(updatedCSV, 'utf-8');
-      await this.dropboxService.uploadFile(this.dropboxPath, buffer, 'overwrite');
+      const uploadMode = fileExists ? 'overwrite' : 'add';
+      console.log(`📤 Uploading CSV with mode: ${uploadMode}`);
+      await this.dropboxService.uploadFile(this.dropboxPath, buffer, uploadMode);
 
       console.log(`✅ Consent response added to CSV: ${consentData.txprCode}`);
       return {
