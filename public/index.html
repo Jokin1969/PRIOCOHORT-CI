@@ -15,7 +15,7 @@
                 <div class="header">
                     <img src="/assets/logo-osakidetza.png" alt="Osakidetza" class="logo" id="logo-osakidetza">
                     <h1>PRIOCOHORT</h1>
-                    <h2>Consentimiento Informado</h2>
+                    <h2>Consentimiento informado</h2>
                 </div>
 
                 <div class="form-container">
@@ -52,7 +52,7 @@
             <div class="container">
                 <div class="document-header">
                     <img src="/assets/logo-osakidetza.png" alt="Osakidetza" class="logo-small">
-                    <h2>Hoja de Información al Paciente</h2>
+                    <h2>Hoja de información</h2>
                 </div>
 
                 <div id="information-content" class="content-section">
@@ -84,7 +84,7 @@
                         <div class="checkbox-group">
                             <input type="checkbox" id="check-read-sheet">
                             <label for="check-read-sheet">
-                                He leído la hoja de información al paciente, de la que se me ha entregado una copia (o me la he podido descargar)
+                                He leído la hoja de información y he recibido una copia, en papel o en formato descargable
                             </label>
                         </div>
 
@@ -92,7 +92,13 @@
                             <div class="checkbox-group">
                                 <input type="checkbox" id="check-received-info">
                                 <label for="check-received-info">
-                                    He recibido información clara sobre las características del estudio
+                                    <strong>He recibido información clara sobre las características del estudio, incluyendo:</strong>
+                                    <ul style="margin-top: 10px; margin-left: 20px;">
+                                        <li>Los objetivos y procedimientos del estudio</li>
+                                        <li>Los posibles beneficios y riesgos que puedo esperar</li>
+                                        <li>Los derechos que puedo ejercitar</li>
+                                        <li>Las previsiones sobre el tratamiento de datos y muestras</li>
+                                    </ul>
                                 </label>
                             </div>
                         </div>
@@ -101,7 +107,14 @@
                             <div class="checkbox-group">
                                 <input type="checkbox" id="check-understand">
                                 <label for="check-understand">
-                                    Comprendo las condiciones del estudio
+                                    <strong>Comprendo que:</strong>
+                                    <ul style="margin-top: 10px; margin-left: 20px;">
+                                        <li>Se mantendrá en secreto mi identidad</li>
+                                        <li>Mis muestras se identificarán con un sistema de codificación</li>
+                                        <li>Soy libre de revocar mi consentimiento en cualquier momento y por cualquier motivo</li>
+                                        <li>No tengo que dar explicaciones para retirarme</li>
+                                        <li>Mi retirada no repercutirá negativamente sobre cualquier tratamiento médico presente o futuro</li>
+                                    </ul>
                                 </label>
                             </div>
                         </div>
@@ -120,14 +133,14 @@
                         <div class="checkbox-group">
                             <input type="checkbox" id="check-main-1">
                             <label for="check-main-1">
-                                Acepto participar voluntariamente en este estudio
+                                <strong>SÍ DOY MI CONSENTIMIENTO</strong> para que se utilicen mis muestras y los datos clínicos asociados como parte de este proyecto de investigación
                             </label>
                         </div>
 
                         <div class="checkbox-group">
                             <input type="checkbox" id="check-main-2">
                             <label for="check-main-2">
-                                Confirmo que he comprendido toda la información proporcionada
+                                <strong>CONSIENTO</strong> participar voluntariamente en este estudio
                             </label>
                         </div>
 
@@ -140,30 +153,30 @@
 
                     <!-- Sección 3: Decisiones sobre resultados -->
                     <div id="section-decisions" class="consent-section">
-                        <h3>DECISIONES SOBRE RESULTADOS DEL ESTUDIO</h3>
+                        <h3>DECISIONES SOBRE LOS RESULTADOS DEL ESTUDIO</h3>
 
-                        <h4>Información sobre estado genético:</h4>
+                        <h4>🧬 Información sobre su estado genético:</h4>
+                        <p style="font-style: italic; margin-bottom: 15px;">Tras haber sido advertido sobre la posibilidad de recibir información derivada de los análisis genéticos que se realicen sobre mi muestra biológica:</p>
+
                         <div class="radio-group">
-                            <input type="radio" name="genetic-info" id="genetic-yes" value="quiero">
-                            <label for="genetic-yes">Quiero ser informado</label>
+                            <input type="radio" name="genetic-info" id="genetic-yes" value="si-solicito">
+                            <label for="genetic-yes"><strong>SÍ SOLICITO</strong> información sobre mi estado de portador o no portador de la mutación asociada a la enfermedad priónica</label>
                         </div>
                         <div class="radio-group">
                             <input type="radio" name="genetic-info" id="genetic-no" value="no-quiero">
-                            <label for="genetic-no">No quiero ser informado</label>
-                        </div>
-                        <div class="radio-group">
-                            <input type="radio" name="genetic-info" id="genetic-delegate" value="delego">
-                            <label for="genetic-delegate">Delego la decisión</label>
+                            <label for="genetic-no"><strong>NO QUIERO</strong> recibir información sobre mi estado genético</label>
                         </div>
 
-                        <h4>Información sobre biomarcadores de progresión:</h4>
+                        <h4 style="margin-top: 30px;">🔬 Información sobre sus biomarcadores de progresión:</h4>
+                        <p style="font-style: italic; margin-bottom: 15px;">Independientemente de la decisión anterior, tras haber sido advertido sobre la posibilidad de recibir información derivada de los análisis realizados sobre mis muestras:</p>
+
                         <div class="radio-group">
-                            <input type="radio" name="biomarkers" id="biomarkers-yes" value="quiero">
-                            <label for="biomarkers-yes">Quiero ser informado</label>
+                            <input type="radio" name="biomarkers" id="biomarkers-yes" value="si-solicito">
+                            <label for="biomarkers-yes"><strong>SÍ SOLICITO</strong> información sobre el posible inicio de la enfermedad si se detecta en mis muestras durante la investigación</label>
                         </div>
                         <div class="radio-group">
                             <input type="radio" name="biomarkers" id="biomarkers-no" value="no-quiero">
-                            <label for="biomarkers-no">No quiero ser informado</label>
+                            <label for="biomarkers-no"><strong>NO QUIERO</strong> recibir información sobre progresión de la enfermedad</label>
                         </div>
 
                         <div class="navigation-buttons">
@@ -189,22 +202,22 @@
                         <div id="biobank-details" class="hidden">
                             <h4>Tipo de donación:</h4>
                             <div class="radio-group">
-                                <input type="radio" name="donation-type" id="donation-general" value="general">
-                                <label for="donation-general">Donación general</label>
+                                <input type="radio" name="donation-type" id="donation-coded" value="codificadas">
+                                <label for="donation-coded"><strong>MUESTRAS CODIFICADAS</strong> (puedo conocer resultados en el futuro si lo deseo)</label>
                             </div>
                             <div class="radio-group">
-                                <input type="radio" name="donation-type" id="donation-specific" value="especifica">
-                                <label for="donation-specific">Donación específica</label>
+                                <input type="radio" name="donation-type" id="donation-anonymous" value="anonimizadas">
+                                <label for="donation-anonymous"><strong>MUESTRAS ANONIMIZADAS</strong> (sin posibilidad de conocer resultados en el futuro)</label>
                             </div>
 
                             <h4>Uso autorizado:</h4>
                             <div class="radio-group">
-                                <input type="radio" name="authorized-use" id="use-any" value="cualquier">
-                                <label for="use-any">Cualquier tipo de investigación biomédica</label>
+                                <input type="radio" name="authorized-use" id="use-prion" value="solo-prion">
+                                <label for="use-prion"><strong>SOLO</strong> para investigación en enfermedades priónicas</label>
                             </div>
                             <div class="radio-group">
-                                <input type="radio" name="authorized-use" id="use-specific" value="solo-prion">
-                                <label for="use-specific">Solo investigación en enfermedades priónicas</label>
+                                <input type="radio" name="authorized-use" id="use-any" value="cualquier">
+                                <label for="use-any"><strong>CUALQUIER</strong> investigación biomédica (preferentemente en enfermedades priónicas)</label>
                             </div>
                         </div>
 
@@ -221,23 +234,23 @@
                         <p>
                             Por favor, firme en el recuadro inferior para confirmar su consentimiento informado.
                             Una vez firmado y enviado, se generará un PDF que será enviado a la Dra. Izaro Kortazar
-                            y usted recibirá una copia para sus registros.
+                            y usted recibirá una copia para sus registros, que podrá descargarse desde esta aplicación.
                         </p>
 
                         <div class="signature-container">
-                            <label>Firma del paciente:</label>
+                            <label>Firma del participante:</label>
                             <canvas id="signature-pad" width="400" height="200"></canvas>
                             <button id="btn-clear-signature" class="btn btn-secondary btn-small">Limpiar firma</button>
                         </div>
 
                         <p class="signature-info">
-                            <strong>Paciente:</strong> <span id="patient-name-signature"></span><br>
+                            <strong>Participante:</strong> <span id="patient-name-signature"></span><br>
                             <strong>DNI:</strong> <span id="patient-dni-signature"></span><br>
                             <strong>Fecha:</strong> <span id="current-date"></span>
                         </p>
 
                         <div class="warning-box">
-                            <p><strong>⚠️ Importante:</strong> Al presionar "Enviar Consentimiento", usted confirma que:</p>
+                            <p><strong>⚠️ Importante:</strong> Al presionar "Enviar consentimiento", usted confirma que:</p>
                             <ul>
                                 <li>Ha leído y comprendido toda la información proporcionada</li>
                                 <li>Ha tenido oportunidad de hacer preguntas</li>
@@ -248,7 +261,7 @@
 
                         <div class="navigation-buttons">
                             <button id="btn-back-consent-4" class="btn btn-secondary">← Anterior</button>
-                            <button id="btn-submit-consent" class="btn btn-success" disabled>✓ Enviar Consentimiento</button>
+                            <button id="btn-submit-consent" class="btn btn-success" disabled>✓ Enviar consentimiento</button>
                         </div>
                     </div>
                 </div>
@@ -263,7 +276,7 @@
                     <h2>Consentimiento enviado correctamente</h2>
                     <p>
                         Su consentimiento informado ha sido procesado y enviado correctamente a la
-                        Dra. Izaro Kortazar (izaro.kortazarzubizarreta@osakidetza.eus).
+                        <a href="mailto:izaro.kortazarzubizarreta@osakidetza.eus">Dra. Izaro Kortazar</a>
                     </p>
                     <p>
                         <strong>Código de seguimiento:</strong> <span id="txpr-code-display"></span>
@@ -271,9 +284,11 @@
                     <p>
                         Puede descargar una copia del documento firmado para sus registros:
                     </p>
-                    <button id="btn-download-final-pdf" class="btn btn-primary btn-large">
-                        📥 Descargar PDF del Consentimiento
-                    </button>
+                    <div style="text-align: center;">
+                        <button id="btn-download-final-pdf" class="btn btn-primary btn-large">
+                            📥 Descargar PDF del Consentimiento
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -281,6 +296,7 @@
 
     <!-- Scripts -->
     <script src="/js/signature-pad.min.js"></script>
+    <script src="/js/information-content.js"></script>
     <script src="/js/app.js"></script>
 </body>
 </html>
