@@ -1,84 +1,51 @@
-// Try to load nodemailer, but gracefully handle if it's not available
-let nodemailer = null;
+// Try to load SendGrid, but gracefully handle if it's not available
+let sgMail = null;
 try {
-  nodemailer = require('nodemailer');
-  console.log('✅ Nodemailer module loaded successfully');
-  console.log('🔍 Nodemailer module inspection:');
-  console.log(`   Type: ${typeof nodemailer}`);
-  console.log(`   Keys: ${Object.keys(nodemailer).join(', ')}`);
-  console.log(`   Has createTransport: ${typeof nodemailer.createTransport}`);
+  sgMail = require('@sendgrid/mail');
+  console.log('✅ SendGrid module loaded successfully');
 } catch (error) {
-  console.error('❌ Failed to load nodemailer module:', error.message);
-  console.error('   This usually means nodemailer is not installed.');
-  console.error('   Check that package.json includes nodemailer and npm install ran successfully.');
+  console.error('❌ Failed to load @sendgrid/mail module:', error.message);
+  console.error('   This usually means @sendgrid/mail is not installed.');
+  console.error('   Check that package.json includes @sendgrid/mail and npm install ran successfully.');
 }
 
 class EmailService {
   constructor() {
-    this.transporter = null;
     this.isInitialized = false;
-    this.nodemailerAvailable = nodemailer !== null;
-    this.initializeTransporter();
+    this.sendgridAvailable = sgMail !== null;
+    this.initialize();
   }
 
   /**
-   * Initialize nodemailer transporter with SMTP configuration
+   * Initialize SendGrid with API key
    */
-  initializeTransporter() {
+  initialize() {
     try {
-      // Check if nodemailer module was loaded
-      if (!this.nodemailerAvailable) {
-        console.log('⚠️  Nodemailer module not available. Email sending will be disabled.');
+      // Check if SendGrid module was loaded
+      if (!this.sendgridAvailable) {
+        console.log('⚠️  SendGrid module not available. Email sending will be disabled.');
         console.log('   Please verify:');
-        console.log('   1. nodemailer is listed in package.json dependencies');
+        console.log('   1. @sendgrid/mail is listed in package.json dependencies');
         console.log('   2. npm install completed without errors');
-        console.log('   3. node_modules/nodemailer directory exists');
         this.isInitialized = false;
         return;
       }
 
-      // Additional check
-      if (typeof nodemailer.createTransport !== 'function') {
-        console.log('⚠️  Nodemailer loaded but createTransport not available.');
-        console.log('   Nodemailer version may be incompatible.');
+      // Check if API key is configured
+      if (!process.env.SENDGRID_API_KEY) {
+        console.log('⚠️  SendGrid API key not configured. Email sending will be disabled.');
+        console.log('   Missing environment variable: SENDGRID_API_KEY');
         this.isInitialized = false;
         return;
       }
 
-      // Check if SMTP is configured
-      if (!process.env.SMTP_HOST || !process.env.SMTP_USER) {
-        console.log('⚠️  SMTP not configured. Email sending will be disabled.');
-        console.log('   Missing environment variables:');
-        if (!process.env.SMTP_HOST) console.log('   - SMTP_HOST');
-        if (!process.env.SMTP_PORT) console.log('   - SMTP_PORT (using default: 587)');
-        if (!process.env.SMTP_USER) console.log('   - SMTP_USER');
-        if (!process.env.SMTP_PASS) console.log('   - SMTP_PASS');
-        this.isInitialized = false;
-        return;
-      }
+      // Initialize SendGrid with API key
+      sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-      console.log('📧 Initializing email service with:');
-      console.log(`   Host: ${process.env.SMTP_HOST}`);
-      console.log(`   Port: ${process.env.SMTP_PORT || '587'}`);
-      console.log(`   User: ${process.env.SMTP_USER}`);
-      console.log(`   Secure: ${process.env.SMTP_SECURE === 'true'}`);
+      console.log('📧 SendGrid email service initialized successfully');
+      console.log(`   API Key: ${process.env.SENDGRID_API_KEY.substring(0, 10)}...`);
 
-      const smtpConfig = {
-        host: process.env.SMTP_HOST,
-        port: parseInt(process.env.SMTP_PORT || '587'),
-        secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASS
-        },
-        connectionTimeout: 10000, // 10 seconds
-        greetingTimeout: 10000,   // 10 seconds
-        socketTimeout: 30000      // 30 seconds
-      };
-
-      this.transporter = nodemailer.createTransport(smtpConfig);
       this.isInitialized = true;
-      console.log('✅ Email service initialized successfully');
     } catch (error) {
       console.error('❌ Error initializing email service:', error.message);
       console.error('   Stack trace:', error.stack);
@@ -90,7 +57,7 @@ class EmailService {
    * Check if email service is configured and ready
    */
   isConfigured() {
-    return this.isInitialized && this.transporter !== null;
+    return this.isInitialized && this.sendgridAvailable;
   }
 
   /**
@@ -112,9 +79,12 @@ class EmailService {
     }
 
     try {
-      const mailOptions = {
-        from: `"PRIOCOHORT" <${process.env.SMTP_USER}>`,
+      // Convert PDF buffer to base64 for SendGrid
+      const pdfBase64 = pdfBuffer.toString('base64');
+
+      const msg = {
         to: to,
+        from: process.env.SENDGRID_FROM_EMAIL || 'joaquin.castilla@gmail.com',
         subject: `Nuevo Consentimiento Informado - ${txprCode}`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -140,41 +110,33 @@ class EmailService {
         `,
         attachments: [
           {
+            content: pdfBase64,
             filename: filename,
-            content: pdfBuffer,
-            contentType: 'application/pdf'
+            type: 'application/pdf',
+            disposition: 'attachment'
           }
         ]
       };
 
-      console.log(`📧 Enviando email a ${to}...`);
+      console.log(`📧 Enviando email a ${to} via SendGrid...`);
       console.log(`   Tamaño del PDF: ${Math.round(pdfBuffer.length / 1024)} KB`);
 
-      // Set a timeout for the email sending operation
-      const sendWithTimeout = Promise.race([
-        this.transporter.sendMail(mailOptions),
-        new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('Email send timeout after 45 seconds')), 45000)
-        )
-      ]);
+      const response = await sgMail.send(msg);
 
-      const info = await sendWithTimeout;
-
-      console.log(`✅ Email enviado exitosamente: ${info.messageId}`);
+      console.log(`✅ Email enviado exitosamente via SendGrid`);
+      console.log(`   Status code: ${response[0].statusCode}`);
 
       return {
         success: true,
-        messageId: info.messageId,
-        recipient: to
+        messageId: response[0].headers['x-message-id'],
+        recipient: to,
+        statusCode: response[0].statusCode
       };
     } catch (error) {
-      console.error('❌ Error enviando email:', error.message);
-      console.error('   Error details:', {
-        code: error.code,
-        command: error.command,
-        response: error.response,
-        responseCode: error.responseCode
-      });
+      console.error('❌ Error enviando email via SendGrid:', error.message);
+      if (error.response) {
+        console.error('   Response body:', error.response.body);
+      }
       return {
         success: false,
         error: error.message,
@@ -184,7 +146,7 @@ class EmailService {
   }
 
   /**
-   * Test email configuration
+   * Test email configuration (not applicable for SendGrid, but keep for compatibility)
    */
   async testConnection() {
     if (!this.isConfigured()) {
@@ -194,18 +156,12 @@ class EmailService {
       };
     }
 
-    try {
-      await this.transporter.verify();
-      return {
-        success: true,
-        message: 'Email configuration is valid'
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: error.message
-      };
-    }
+    // SendGrid doesn't have a test connection method like SMTP
+    // Just return success if API key is configured
+    return {
+      success: true,
+      message: 'SendGrid API key is configured'
+    };
   }
 }
 
