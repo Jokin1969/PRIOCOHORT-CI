@@ -1,5 +1,4 @@
-const { Dropbox } = require('dropbox');
-const fetch = require('node-fetch');
+const dropboxService = require('./dropbox.service');
 
 /**
  * Servicio para gestionar las respuestas del consentimiento informado en CSV
@@ -8,44 +7,10 @@ const fetch = require('node-fetch');
 class CSVResponsesService {
   constructor() {
     this.dropboxPath = '/ConnectingPrion/priocohort/responses/CI_responses.csv';
-    this.dbx = null;
-    this.isInitialized = false;
-    this.initializeDropbox();
-  }
-
-  /**
-   * Inicializar cliente de Dropbox
-   */
-  initializeDropbox() {
-    try {
-      console.log('📊 Initializing CSV Responses service...');
-
-      if (!process.env.DROPBOX_REFRESH_TOKEN || !process.env.DROPBOX_CLIENT_ID) {
-        console.log('⚠️  CSV Responses: Dropbox credentials not configured. CSV sync will be disabled.');
-        console.log('   Missing:');
-        if (!process.env.DROPBOX_REFRESH_TOKEN) console.log('   - DROPBOX_REFRESH_TOKEN');
-        if (!process.env.DROPBOX_CLIENT_ID) console.log('   - DROPBOX_CLIENT_ID');
-        if (!process.env.DROPBOX_CLIENT_SECRET) console.log('   - DROPBOX_CLIENT_SECRET');
-        this.isInitialized = false;
-        return;
-      }
-
-      console.log('📊 Creating Dropbox client for CSV service...');
-      this.dbx = new Dropbox({
-        fetch,
-        clientId: process.env.DROPBOX_CLIENT_ID,
-        clientSecret: process.env.DROPBOX_CLIENT_SECRET,
-        refreshToken: process.env.DROPBOX_REFRESH_TOKEN
-      });
-
-      this.isInitialized = true;
-      console.log('✅ CSV Responses service initialized');
-      console.log(`   Target path: ${this.dropboxPath}`);
-    } catch (error) {
-      console.error('❌ Error initializing CSV Responses service:', error.message);
-      console.error('   Stack trace:', error.stack);
-      this.isInitialized = false;
-    }
+    this.dropboxService = dropboxService;
+    console.log('📊 CSV Responses service initialized');
+    console.log(`   Target path: ${this.dropboxPath}`);
+    console.log(`   Using shared Dropbox service: ${this.isConfigured() ? '✅ Ready' : '❌ Not configured'}`);
   }
 
   /**
@@ -115,16 +80,16 @@ class CSVResponsesService {
    * Descargar CSV desde Dropbox
    */
   async downloadCSV() {
-    if (!this.isInitialized) {
+    if (!this.isConfigured()) {
       return null;
     }
 
     try {
-      const response = await this.dbx.filesDownload({ path: this.dropboxPath });
-      const csvContent = response.result.fileBinary.toString('utf-8');
+      const csvBuffer = await this.dropboxService.downloadFile(this.dropboxPath);
+      const csvContent = csvBuffer.toString('utf-8');
       return csvContent;
     } catch (error) {
-      if (error.status === 409) {
+      if (error.error && error.error['.tag'] === 'path' && error.error.path['.tag'] === 'not_found') {
         // Archivo no existe, retornar null
         console.log('📝 CSV file does not exist yet, will create new one');
         return null;
@@ -137,17 +102,13 @@ class CSVResponsesService {
    * Subir CSV a Dropbox
    */
   async uploadCSV(csvContent) {
-    if (!this.isInitialized) {
-      throw new Error('CSV Responses service not initialized');
+    if (!this.isConfigured()) {
+      throw new Error('CSV Responses service not configured');
     }
 
     try {
-      await this.dbx.filesUpload({
-        path: this.dropboxPath,
-        contents: csvContent,
-        mode: 'overwrite',
-        autorename: false
-      });
+      const buffer = Buffer.from(csvContent, 'utf-8');
+      await this.dropboxService.uploadFile(this.dropboxPath, buffer);
 
       console.log(`✅ CSV uploaded successfully to ${this.dropboxPath}`);
       return { success: true };
@@ -161,9 +122,9 @@ class CSVResponsesService {
    * Añadir respuesta de consentimiento al CSV
    */
   async addConsentResponse(consentData) {
-    if (!this.isInitialized) {
-      console.log('⚠️  CSV Responses service not initialized. Skipping CSV update.');
-      return { success: false, message: 'Service not initialized' };
+    if (!this.isConfigured()) {
+      console.log('⚠️  CSV Responses service not configured. Skipping CSV update.');
+      return { success: false, message: 'Service not configured' };
     }
 
     try {
@@ -210,7 +171,7 @@ class CSVResponsesService {
    * Verificar si el servicio está configurado
    */
   isConfigured() {
-    return this.isInitialized;
+    return this.dropboxService && this.dropboxService.isConfigured();
   }
 }
 
