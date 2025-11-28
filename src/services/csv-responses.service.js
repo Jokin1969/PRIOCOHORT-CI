@@ -18,12 +18,19 @@ class CSVResponsesService {
    */
   initializeDropbox() {
     try {
+      console.log('📊 Initializing CSV Responses service...');
+
       if (!process.env.DROPBOX_REFRESH_TOKEN || !process.env.DROPBOX_CLIENT_ID) {
         console.log('⚠️  CSV Responses: Dropbox credentials not configured. CSV sync will be disabled.');
+        console.log('   Missing:');
+        if (!process.env.DROPBOX_REFRESH_TOKEN) console.log('   - DROPBOX_REFRESH_TOKEN');
+        if (!process.env.DROPBOX_CLIENT_ID) console.log('   - DROPBOX_CLIENT_ID');
+        if (!process.env.DROPBOX_CLIENT_SECRET) console.log('   - DROPBOX_CLIENT_SECRET');
         this.isInitialized = false;
         return;
       }
 
+      console.log('📊 Creating Dropbox client for CSV service...');
       this.dbx = new Dropbox({
         fetch,
         clientId: process.env.DROPBOX_CLIENT_ID,
@@ -33,8 +40,10 @@ class CSVResponsesService {
 
       this.isInitialized = true;
       console.log('✅ CSV Responses service initialized');
+      console.log(`   Target path: ${this.dropboxPath}`);
     } catch (error) {
       console.error('❌ Error initializing CSV Responses service:', error.message);
+      console.error('   Stack trace:', error.stack);
       this.isInitialized = false;
     }
   }
