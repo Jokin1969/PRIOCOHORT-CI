@@ -259,7 +259,7 @@ const INFORMATION_CONTENT = {
 
             <h3>Análisis genéticos básicos</h3>
             <ul>
-                <li>Confirmación de si es portador de una mutación priónica</li>
+                <li>Confirmación de si es portador de una mutación priónica (esta información solo se le dará si usted la desea expresamente)</li>
                 <li>Tipo específico de mutación (E200K, D178N, P102L, A117V, u otras)</li>
                 <li>Variantes que pueden influir en la enfermedad (polimorfismo en posición 129 u otros)</li>
             </ul>
