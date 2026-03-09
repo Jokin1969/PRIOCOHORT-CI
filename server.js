@@ -22,28 +22,19 @@ const consentRoutes = require('./src/routes/consent.routes');
 app.use('/api/dni', dniRoutes);
 app.use('/api/consent', consentRoutes);
 
-// TEST EMAIL ENDPOINT - Remove after testing
-app.get('/test-email', async (req, res) => {
-  const emailService = require('./src/services/email.service');
-
-  const connection = await emailService.testConnection();
-  if (!connection.success) {
-    return res.status(500).json({ ok: false, step: 'connection', error: connection.message });
-  }
-
-  const result = await emailService.sendConsentEmail({
-    to: process.env.SMTP_USER,
-    txprCode: 'TEST-001',
-    participantName: 'Usuario de Prueba',
-    pdfBuffer: Buffer.from('PDF de prueba'),
-    filename: 'test.pdf'
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    environment: {
+      hasSmtpHost: !!process.env.SMTP_HOST,
+      hasSmtpUser: !!process.env.SMTP_USER,
+      hasSmtpPass: !!process.env.SMTP_PASS,
+      hasDropboxToken: !!process.env.DROPBOX_REFRESH_TOKEN || !!process.env.DROPBOX_ACCESS_TOKEN,
+      contactEmail: process.env.CONTACT_EMAIL || 'not set'
+    }
   });
-
-  if (result.success) {
-    res.json({ ok: true, message: 'Email de prueba enviado', messageId: result.messageId });
-  } else {
-    res.status(500).json({ ok: false, step: 'send', error: result.error });
-  }
 });
 
 // Ruta principal - servir el index.html
@@ -69,8 +60,17 @@ async function startServer() {
 
     // Iniciar servidor
     app.listen(PORT, () => {
-      console.log(`🚀 Servidor PRIOCOHORT-CI ejecutándose en puerto ${PORT}`);
+      console.log(`\n🚀 Servidor PRIOCOHORT-CI ejecutándose en puerto ${PORT}`);
       console.log(`📝 Accede a la aplicación en: http://localhost:${PORT}`);
+      console.log(`\n📧 Configuración SMTP:`);
+      console.log(`   Host: ${process.env.SMTP_HOST || '✗ NO configurado'}`);
+      console.log(`   User: ${process.env.SMTP_USER ? '✓ Configurado' : '✗ NO configurado'}`);
+      console.log(`   Pass: ${process.env.SMTP_PASS ? '✓ Configurada' : '✗ NO configurada'}`);
+      console.log(`   Email destino: ${process.env.CONTACT_EMAIL || '✗ NO configurado'}`);
+      console.log(`\n💡 Endpoints disponibles:`);
+      console.log(`   GET  /              → Aplicación principal`);
+      console.log(`   GET  /api/health    → Estado del servidor`);
+      console.log(`   POST /api/consent/save → Guardar consentimiento\n`);
     });
   } catch (error) {
     console.error('❌ Error durante la inicialización:', error);
@@ -78,8 +78,17 @@ async function startServer() {
 
     // Start server anyway with local files
     app.listen(PORT, () => {
-      console.log(`🚀 Servidor PRIOCOHORT-CI ejecutándose en puerto ${PORT}`);
+      console.log(`\n🚀 Servidor PRIOCOHORT-CI ejecutándose en puerto ${PORT}`);
       console.log(`📝 Accede a la aplicación en: http://localhost:${PORT}`);
+      console.log(`\n📧 Configuración SMTP:`);
+      console.log(`   Host: ${process.env.SMTP_HOST || '✗ NO configurado'}`);
+      console.log(`   User: ${process.env.SMTP_USER ? '✓ Configurado' : '✗ NO configurado'}`);
+      console.log(`   Pass: ${process.env.SMTP_PASS ? '✓ Configurada' : '✗ NO configurada'}`);
+      console.log(`   Email destino: ${process.env.CONTACT_EMAIL || '✗ NO configurado'}`);
+      console.log(`\n💡 Endpoints disponibles:`);
+      console.log(`   GET  /              → Aplicación principal`);
+      console.log(`   GET  /api/health    → Estado del servidor`);
+      console.log(`   POST /api/consent/save → Guardar consentimiento\n`);
     });
   }
 }
