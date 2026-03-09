@@ -22,6 +22,30 @@ const consentRoutes = require('./src/routes/consent.routes');
 app.use('/api/dni', dniRoutes);
 app.use('/api/consent', consentRoutes);
 
+// TEST EMAIL ENDPOINT - Remove after testing
+app.get('/test-email', async (req, res) => {
+  const emailService = require('./src/services/email.service');
+
+  const connection = await emailService.testConnection();
+  if (!connection.success) {
+    return res.status(500).json({ ok: false, step: 'connection', error: connection.message });
+  }
+
+  const result = await emailService.sendConsentEmail({
+    to: process.env.SMTP_USER,
+    txprCode: 'TEST-001',
+    participantName: 'Usuario de Prueba',
+    pdfBuffer: Buffer.from('PDF de prueba'),
+    filename: 'test.pdf'
+  });
+
+  if (result.success) {
+    res.json({ ok: true, message: 'Email de prueba enviado', messageId: result.messageId });
+  } else {
+    res.status(500).json({ ok: false, step: 'send', error: result.error });
+  }
+});
+
 // Ruta principal - servir el index.html
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
