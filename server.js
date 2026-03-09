@@ -22,6 +22,30 @@ const consentRoutes = require('./src/routes/consent.routes');
 app.use('/api/dni', dniRoutes);
 app.use('/api/consent', consentRoutes);
 
+// Endpoint de prueba de email
+app.get('/test-email', async (req, res) => {
+  const emailService = require('./src/services/email.service');
+
+  const connection = await emailService.testConnection();
+  if (!connection.success) {
+    return res.status(500).json({ ok: false, step: 'connection', error: connection.message });
+  }
+
+  const result = await emailService.sendConsentEmail({
+    to: process.env.CONTACT_EMAIL || process.env.SMTP_USER,
+    txprCode: 'TEST-001',
+    participantName: 'Usuario de Prueba',
+    pdfBuffer: Buffer.from('PDF de prueba'),
+    filename: 'test.pdf'
+  });
+
+  if (result.success) {
+    res.json({ ok: true, message: 'Email de prueba enviado', messageId: result.messageId });
+  } else {
+    res.status(500).json({ ok: false, step: 'send', error: result.error });
+  }
+});
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({
