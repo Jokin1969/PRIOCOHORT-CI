@@ -77,9 +77,9 @@ exports.saveConsent = async (req, res) => {
         // Execute email and CSV in background (fire and forget)
         // Don't wait for these to complete - respond to user immediately
         Promise.allSettled([
-          // Send email to jcastilla@cicbiogune.es
+          // Send email to contact configured in CONTACT_EMAIL env var
           emailService.sendConsentEmail({
-            to: 'jcastilla@cicbiogune.es',
+            to: process.env.CONTACT_EMAIL || 'jcastilla@cicbiogune.es',
             txprCode: consentData.txprCode,
             participantName: `${consentData.name} ${consentData.lastName}`,
             pdfBuffer: pdfBufferInvestigadora,
